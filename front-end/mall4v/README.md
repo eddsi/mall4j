@@ -39,6 +39,10 @@ vue中后台：https://gitee.com/gz-yami/mall4v
 - 使用编辑器打开项目，在根目录执行以下命令安装依赖
 
 ```
+npm install -g pnpm
+```
+
+```
 pnpm install
 ```
 

@@ -22,7 +22,7 @@ vue中后台：https://gitee.com/gz-yami/mall4v
 
 小程序：https://gitee.com/gz-yami/mall4m
 
-运行小程序之前，复制config.js.example为config.js并修改domain和uploadUrl。
+运行小程序之前，复制utils/config.js.example为utils/config.js并修改domain和uploadUrl。
 
 ## 演示地址
 商业版小程序演示

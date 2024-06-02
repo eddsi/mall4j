@@ -78,7 +78,15 @@ https://gitee.com/gz-yami/mall4j/wikis
 
 有声音了。如果视频对你有用，记得点赞投币噢。
 
+## 真正的部署教程！！
 
+java后台：也就是当前项目。下面三个项目不用从仓库拉取，front-end文件夹中已经存放了它们的代码。请直接查看特定文件夹下的README
+
+后台管理界面的前端（vue）：https://gitee.com/gz-yami/mall4v
+
+小程序：https://gitee.com/gz-yami/mall4m
+
+uni-app：https://gitee.com/gz-yami/mall4uni
 
 ## 相关截图
 
