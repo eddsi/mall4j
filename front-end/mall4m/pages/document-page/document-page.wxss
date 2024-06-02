@@ -1,0 +1,47 @@
+/* 页面背景 */
+page {
+  background-color: #f8f8f8;
+}
+
+/* 容器样式 */
+.container {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  padding: 20px;
+}
+
+/* 每个条目的样式 */
+.item {
+  margin-bottom: 10px;
+}
+
+/* 输入框样式 */
+input {
+  height: 40px;
+  padding: 0 10px;
+  margin-top: 5px;
+  margin-bottom: 20px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #fff;
+}
+
+/* 按钮样式 */
+button {
+  background-color: #e8e7ec;
+  color: black;
+  border: none;
+  border-radius: 10px;
+  padding: 0px;
+  font-size: 16px;
+  margin-bottom: 20px;
+}
+
+/* 文件名显示 */
+.filename {
+  color: #333;
+  padding: 5px 0;
+  text-align: center; /* 确保文本水平居中 */
+  display: block; /* 确保是块级元素 */
+}

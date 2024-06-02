@@ -23,6 +23,13 @@
     <!-- end swiper -->
 
     <view class='cat-item'>
+      <view class='item' bindtap='toDocumentUpload' data-sts="1">
+        <image src='../../images/icon/newProd.png'></image>
+        <text>文档上传</text>
+      </view>
+    </view>
+
+    <view class='cat-item'>
       <view class='item' bindtap='toClassifyPage' data-sts="1">
         <image src='../../images/icon/newProd.png'></image>
         <text>新品推荐</text>

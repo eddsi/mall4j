@@ -1,0 +1,7 @@
+<view>
+  <button bindtap="chooseFile">选择文件</button>
+  <view>文件：{{file ? file.name : '未选择'}}</view>
+  <input placeholder="输入文档简介" data-field="description" bindinput="bindInput"/>
+  <input placeholder="输入关键字" data-field="keywords" bindinput="bindInput"/>
+  <button bindtap="uploadFile">上传文件</button>
+</view>
