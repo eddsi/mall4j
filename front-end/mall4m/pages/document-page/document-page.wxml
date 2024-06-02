@@ -20,9 +20,9 @@
     </view>
   </view>
   <view class="agreement">
-    <checkbox-group>
+    <checkbox-group bindchange="checkboxChange">
       <label class="checkbox-label">
-        <checkbox  value="agree" color="#1b7dec" bindchange="checkboxChange" />
+        <checkbox  value="agree" color="#1b7dec"  />
         我已阅读并同意用户协议和隐私政策
       </label>
     </checkbox-group>
