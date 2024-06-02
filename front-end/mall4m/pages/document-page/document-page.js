@@ -1,3 +1,4 @@
+var config = require('../../utils/config.js');
 Page({
   data: {
     description: '', // 文档简介
@@ -8,10 +9,8 @@ Page({
 
   // 处理复选框变更
   checkboxChange: function (e) {
-    console.log('Checkbox change event:', e.detail.value);
-    // 直接判断数组中是否包含特定值（如果是单个复选框，通常使用布尔值来表示是否选中）
     this.setData({
-      isChecked: e.detail.value.includes('agree') // 假设复选框的value设置为"agree"
+      isChecked: e.detail.value.includes('agree')
     });
   },
 
@@ -57,15 +56,11 @@ Page({
     }
 
     if (that.data.file) {
-      wx.showToast({
-        title: '上传成功',
-        icon: 'none'
-      });
       const {
         path
       } = that.data.file;
       wx.uploadFile({
-        url: 'your_upload_url', // 这里替换成你的上传URL
+        url: config.uploadUrl,
         filePath: path,
         name: 'file',
         formData: {
@@ -75,10 +70,16 @@ Page({
         success(res) {
           wx.showToast({
             title: '上传成功',
-            icon: 'success'
+            icon: 'success',
+            duration: 2000  // 设置提示持续的时间为2000毫秒（2秒）
           });
-          wx.navigateBack(); // 成功后返回上一页
-        },
+        
+          // 设置延时函数，延迟2秒后执行页面返回
+          setTimeout(function() {
+            wx.navigateBack();  // 成功后返回上一页
+          }, 2000);  // 这里的延迟时间应与上面的提示持续时间一致
+        }
+        ,
         fail() {
           wx.showToast({
             title: '上传失败',
