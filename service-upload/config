@@ -1,0 +1,5 @@
+minio_ip_port = "<ip:port>"
+access_key = "<>"
+secret_key = "<>"
+secure = False
+bucket = "<>"
