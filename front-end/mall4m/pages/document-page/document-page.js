@@ -14,7 +14,6 @@ Page({
     });
   },
 
-
   // 绑定输入框数据
   bindInput: function (e) {
     this.setData({
@@ -71,13 +70,13 @@ Page({
           wx.showToast({
             title: '上传成功',
             icon: 'success',
-            duration: 2000  // 设置提示持续的时间为2000毫秒（2秒）
+            duration: 1000  // 设置提示持续的时间为2000毫秒（1秒）
           });
         
           // 设置延时函数，延迟2秒后执行页面返回
           setTimeout(function() {
             wx.navigateBack();  // 成功后返回上一页
-          }, 2000);  // 这里的延迟时间应与上面的提示持续时间一致
+          }, 1000);  // 这里的延迟时间应与上面的提示持续时间一致
         }
         ,
         fail() {
