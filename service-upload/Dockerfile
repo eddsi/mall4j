@@ -15,4 +15,5 @@ EXPOSE 5000
 EXPOSE 8000
 
 # 运行应用
-CMD ["gunicorn", "-w", "4", "app:app"]
+#CMD ["gunicorn", "-w", "4", "app:app"]
+CMD ["python", "app.py"]
