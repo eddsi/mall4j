@@ -24,7 +24,14 @@
 			<version>${yami.shop.version}</version>
 		</dependency>
 	</dependencies>
-
+	<profiles>
+	<profile>
+		<id>mikey</id>
+		<properties>
+			<active>mikey</active>
+		</properties>
+	</profile>
+	</profiles>
 	<build>
 		<plugins>
 			<plugin>

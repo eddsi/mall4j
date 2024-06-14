@@ -113,7 +113,12 @@
             <dependency>
                 <groupId>org.apache.logging.log4j</groupId>
                 <artifactId>log4j-core</artifactId>
-                <version>${log4j.version}</version>
+                <version>2.17.1</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.pdfbox</groupId>
+                <artifactId>pdfbox</artifactId>
+                <version>2.0.24</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.logging.log4j</groupId>
@@ -184,6 +189,13 @@
         </plugins>
     </build>
 
+    <profiles>
+        <profile>
+            <id>mikey</id>
+            <properties>
+            </properties>
+        </profile>
+    </profiles>
     <repositories>
         <repository>
             <id>aliyun</id>
