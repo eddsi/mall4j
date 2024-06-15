@@ -2,7 +2,7 @@ server:
   port: 8085
 spring:
   datasource:
-    url: jdbc:mysql://172.31.47.130:3306/yami_shops?allowMultiQueries=true&useSSL=false&useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&zeroDateTimeBehavior=convertToNull&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=GMT%2B8&nullCatalogMeansCurrent=true
+    url: jdbc:mysql://localhost:3306/yami_shops?allowMultiQueries=true&useSSL=false&useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&zeroDateTimeBehavior=convertToNull&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=GMT%2B8&nullCatalogMeansCurrent=true
     username: root
     password: 123456
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -15,9 +15,14 @@ spring:
       connection-test-query: SELECT 1
   data:
     redis:
-      host: 172.31.47.130
+      host: localhost
       port: 6379
       database: 0
+minio:
+  endpoint: http://prn.567657.xyz:9000
+  access-key: minio
+  secret-key: minio@2024
+  bucket: random
 logging:
   config: classpath:logback/logback-dev.xml
 xxl-job:

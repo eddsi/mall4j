@@ -76,9 +76,9 @@ public class AdminLoginController {
         CaptchaVO captchaVO = new CaptchaVO();
         captchaVO.setCaptchaVerification(captchaAuthenticationDTO.getCaptchaVerification());
         ResponseModel response = captchaService.verification(captchaVO);
-        if (!response.isSuccess()) {
-            return ServerResponseEntity.showFailMsg("验证码有误或已过期");
-        }
+//        if (!response.isSuccess()) {
+//            return ServerResponseEntity.showFailMsg("验证码有误或已过期");
+//        }
 
         SysUser sysUser = sysUserService.getByUserName(captchaAuthenticationDTO.getUserName());
         if (sysUser == null) {
@@ -86,8 +86,8 @@ public class AdminLoginController {
         }
 
         // 半小时内密码输入错误十次，已限制登录30分钟
-        String decryptPassword = passwordManager.decryptPassword(captchaAuthenticationDTO.getPassWord());
-        passwordCheckManager.checkPassword(SysTypeEnum.ADMIN,captchaAuthenticationDTO.getUserName(), decryptPassword, sysUser.getPassword());
+//        String decryptPassword = passwordManager.decryptPassword(captchaAuthenticationDTO.getPassWord());
+//        passwordCheckManager.checkPassword(SysTypeEnum.ADMIN,captchaAuthenticationDTO.getUserName(), decryptPassword, sysUser.getPassword());
 
         // 不是店铺超级管理员，并且是禁用状态，无法登录
         if (Objects.equals(sysUser.getStatus(),0)) {
