@@ -67,7 +67,7 @@ public class Document implements Serializable {
     /**
      * minio的图片保存地址
      */
-    private String documentPhotos;
+    private String documentPhotos;  //["1.jpg",'2.jpg"]
     /**
      * 审核状态0未通过1已通过
      */

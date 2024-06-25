@@ -1,7 +1,7 @@
 spring:
   # 环境 dev|test|prod
   profiles:
-    active: dev
+    active: mikey
   #文件上传设置
   servlet:
     multipart:

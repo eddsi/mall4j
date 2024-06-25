@@ -26,6 +26,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yami.shop.bean.dto.CreateDocumentDTO;
 import com.yami.shop.bean.dto.DocumentSearchDTO;
+import com.yami.shop.bean.dto.document.AuditDocumentDTO;
 import com.yami.shop.bean.model.Document;
 import com.yami.shop.bean.model.UserCollectDocument;
 import com.yami.shop.bean.model.UserDocument;
@@ -112,7 +113,7 @@ public class DocumentServiceImpl extends ServiceImpl<DocumentMapper, Document> i
                         .like(StringUtils.isNotBlank(documentSearchDTO.getDocumentName()), Document::getName,
                                 documentSearchDTO.getDocumentName())
                         .eq(documentSearchDTO.getType() != null, Document::getType, documentSearchDTO.getType())
-                        .eq(Document::getStatus, 1)
+                        .eq(Document::getStatus, 2)
                         .orderByDesc(Document::getCreateTime)
                         .page(new Page<>(documentSearchDTO.getCurrent(), documentSearchDTO.getSize()));
         return page.convert(document -> {
@@ -138,6 +139,13 @@ public class DocumentServiceImpl extends ServiceImpl<DocumentMapper, Document> i
     @Override
     public String upload(MultipartFile file) {
         return minioUtils.uploadMultipartFileDown(file);
+    }
+
+    @Override
+    public void auditDocument(AuditDocumentDTO auditDocumentDTO) {
+        Document document = getById(auditDocumentDTO.getDocumentId());
+        document.setStatus(auditDocumentDTO.getStatus());
+        updateById(document);
     }
 
     @SneakyThrows
