@@ -7,7 +7,13 @@ Page({
         file: null,
         isChecked: false // 用户是否勾选了同意协议
     },
-
+    pickerChange(e) {
+      const index = e.detail.value; // 获取选中的索引
+      const selectedKeyword = ['互联网/AI', '电子', '通讯'][index]; // 根据索引获取选中的关键字
+      this.setData({
+        keyword: selectedKeyword // 更新关键字的值
+      });
+    },
     // 处理复选框变更
     checkboxChange: function (e) {
         this.setData({
