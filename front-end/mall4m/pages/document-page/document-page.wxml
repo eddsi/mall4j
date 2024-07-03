@@ -29,35 +29,5 @@
     </checkbox-group>
   </view>
   <button class="button" bindtap="uploadFile">上传文档</button>
-
-  <view class="container-border">
-    <view class="file-container">
-      <view class="file-icon-and-name">
-        <image class="file-icon" src="../../images/icon/toTake.png"></image>
-        <text>{{file.name}}</text>
-        <view class="picker-container">
-          <view>
-            <input class="input" placeholder="这份文档介绍AI的概念" />
-          </view>
-          <picker mode="selector" range="{{ ['互联网/AI'] }}" >
-            <view class="picker">
-              <input class="input" placeholder="互联网/AI" disabled value="{{ keyword }}" />
-            </view>
-          </picker>
-        </view>
-
-      </view>
-
-    </view>
-    <view class="agreement">
-      <checkbox-group bindchange="checkboxChange">
-        <label class="checkbox-label">
-          <checkbox value="agree" color="#1b7dec" checked />
-          勾选我已阅读并同意用户协议和隐私政策
-        </label>
-      </checkbox-group>
-    </view>
-    <button class="button" bindtap="uploadFile">点击此处上传文档</button>
-
-  </view>
+  
 </view>
