@@ -20,6 +20,11 @@ spring:
       database: ${REDIS_DATABASE:0}
 logging:
   config: classpath:logback/logback-prod.xml
+minio:
+  endpoint: http://${MINIO_SERVER}:${MINIO_PORT}
+  access-key: ${MINIO_ACCESS_KEY}
+  secret-key: ${MINIO_SECRET_KEY}
+  bucket: ${MINIO_BUCKET}
 xxl-job:
   accessToken: ${XXL_JOB_ACCESS_TOKEN:default_token}
   logPath: ${XXL_JOB_LOG_PATH:/data/applogs/xxl-job/jobhandler}

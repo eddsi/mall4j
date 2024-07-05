@@ -2,9 +2,7 @@ package com.yami.shop.bean.model;
 
 
 import java.io.Serializable;
-
 import java.time.LocalDate;
-import lombok.Data;
 
 import org.hibernate.validator.constraints.Length;
 
@@ -12,6 +10,8 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+
+import lombok.Data;
 
 /**
  * @TableName document
@@ -58,7 +58,7 @@ public class Document implements Serializable {
     /**
      * 价格
      */
-    private Double prices;
+    private Double price;
     /**
      * 作者
      */

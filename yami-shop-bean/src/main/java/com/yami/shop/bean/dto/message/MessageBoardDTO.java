@@ -2,8 +2,6 @@ package com.yami.shop.bean.dto.message;
 
 import java.util.List;
 
-import com.yami.shop.bean.model.MessageBoard;
-
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 

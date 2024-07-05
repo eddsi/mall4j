@@ -19,7 +19,7 @@ public class CreateDocumentDTO {
     @Schema(name = "name", description = "文档名称")
     private String name;
 
-    @Schema(name = "content", description = "文档内容")
+    @Schema(name = "description", description = "文档内容")
     private String descriptions;
 
     @Schema(name = "keyword", description = "关键字")
@@ -31,8 +31,8 @@ public class CreateDocumentDTO {
     @Schema(name = "key", description = "s3的key")
     private String key;
 
-    @Schema(name = "prices", description = "价格")
-    private Double prices;
+    @Schema(name = "price", description = "价格")
+    private Double price;
 
 
 }
