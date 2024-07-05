@@ -1,4 +1,4 @@
-FROM openjdk:17.0.2
+FROM openjdk:17
 
 
 RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
