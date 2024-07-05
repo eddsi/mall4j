@@ -28,10 +28,17 @@ services:
       dockerfile: ./yami-shop-admin/Dockerfile
     restart: always
     container_name: mall4j-admin
+    env_file:
+      - .env
     environment:
       - REDIS_HOST=mall4j-redis
       - REDIS_PORT=6379
       - REDIS_DATABASE=1
+      - MINIO_SERVER=$MINIO_SERVER
+      - MINIO_PORT=$MINIO_PORT
+      - MINIO_ACCESS_KEY=$MINIO_ACCESS_KEY
+      - MINIO_SECRET_KEY=$MINIO_SECRET_KEY
+      - MINIO_BUCKET=$MINIO_BUCKET
     image: mall4j-admin
     ports:
       - 8085:8085
@@ -48,10 +55,17 @@ services:
       dockerfile: ./yami-shop-api/Dockerfile
     restart: always
     container_name: mall4j-api
+    env_file:
+      - .env
     environment:
       - REDIS_HOST=mall4j-redis
       - REDIS_PORT=6379
       - REDIS_DATABASE=1
+      - MINIO_SERVER=$MINIO_SERVER
+      - MINIO_PORT=$MINIO_PORT
+      - MINIO_ACCESS_KEY=$MINIO_ACCESS_KEY
+      - MINIO_SECRET_KEY=$MINIO_SECRET_KEY
+      - MINIO_BUCKET=$MINIO_BUCKET
     image: mall4j-api
     ports:
       - 8086:8086
