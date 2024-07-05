@@ -17,5 +17,10 @@ spring:
       host: ${REDIS_HOST:mall4j-redis}
       port: ${REDIS_PORT:6379}
       database: ${REDIS_DATABASE:0}
+minio:
+  endpoint: http://${MINIO_SERVER}:${MINIO_PORT}
+  access-key: ${MINIO_ACCESS_KEY}
+  secret-key: ${MINIO_SECRET_KEY}
+  bucket: ${MINIO_BUCKET}
 logging:
   config: classpath:logback/logback-prod.xml
