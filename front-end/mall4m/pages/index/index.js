@@ -58,6 +58,14 @@ Page({
     })
   },
 
+  //文档上传页面
+  toDocumentUpload: function(e) {
+    var url ='/pages/document-page/document-page'
+    wx.navigateTo({
+      url: url,
+    })
+  },
+
   //跳转商品活动页面
   toClassifyPage: function(e) {
     var url = '/pages/prod-classify/prod-classify?sts=' + e.currentTarget.dataset.sts;

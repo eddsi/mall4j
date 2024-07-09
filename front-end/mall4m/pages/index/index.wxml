@@ -23,21 +23,28 @@
     <!-- end swiper -->
 
     <view class='cat-item'>
+      <view class='item' bindtap='toDocumentUpload' data-sts="1">
+        <image src='../../images/icon/revise.png'></image>
+        <text>文档上传</text>
+      </view>
+    </view>
+
+    <view class='cat-item'>
       <view class='item' bindtap='toClassifyPage' data-sts="1">
         <image src='../../images/icon/newProd.png'></image>
-        <text>新品推荐</text>
+        <text>互联网/AI</text>
       </view>
       <view class='item' bindtap='toLimitedTimeOffer' data-sts="2">
         <image src='../../images/icon/timePrice.png'></image>
-        <text>限时特惠</text>
+        <text>电子</text>
       </view>
       <view class='item' bindtap='toClassifyPage' data-sts="3">
         <image src='../../images/icon/neweveryday.png'></image>
-        <text>每日疯抢</text>
+        <text>通讯</text>
       </view>
       <view class='item' bindtap='toCouponCenter'>
         <image src='../../images/icon/newprods.png'></image>
-        <text>领优惠券</text>
+        <text>半导体</text>
       </view>
     </view>
 

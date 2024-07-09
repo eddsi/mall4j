@@ -1,4 +1,4 @@
-FROM openjdk:17.0.2
+FROM openjdk:17
 
 
 RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
@@ -11,4 +11,4 @@ EXPOSE 8086
 
 ADD ./yami-shop-api-0.0.1-SNAPSHOT.jar ./
 
-CMD java -jar -Xms256m -Xmx256m -Xmn256m -Xss256k -XX:SurvivorRatio=8 -Dspring.profiles.active=dev yami-shop-api-0.0.1-SNAPSHOT.jar
+CMD java -jar -Xms256m -Xmx256m -Xmn256m -Xss256k -XX:SurvivorRatio=8 -Dspring.profiles.active=docker yami-shop-api-0.0.1-SNAPSHOT.jar
