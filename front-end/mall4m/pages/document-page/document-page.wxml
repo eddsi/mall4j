@@ -5,6 +5,7 @@
       <text>{{file.name}}</text>
       <view class="picker-container">
           <view>
+            <input class="input" placeholder="请输入文档价格" />
             <input class="input" placeholder="请输入文档简介" />
           </view>
           <picker mode="selector" range="{{ ['互联网/AI', '电子', '通讯'] }}" bindchange="pickerChange">
@@ -46,9 +47,7 @@
             </view>
           </picker>
         </view>
-
       </view>
-
     </view>
     <view class="agreement">
       <checkbox-group bindchange="checkboxChange">
@@ -59,6 +58,5 @@
       </checkbox-group>
     </view>
     <button class="button" bindtap="uploadFile">点击此处上传文档</button>
-
   </view>
 </view>

@@ -29,7 +29,7 @@ page {
   display: flex;
   flex-direction: column;
   align-items: center;
-  height: 200px;
+  height: 280px;
   padding: 20px;
   margin-bottom: 20px;
   /* 与按钮的间距 */

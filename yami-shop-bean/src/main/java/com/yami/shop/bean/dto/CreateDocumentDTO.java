@@ -19,19 +19,19 @@ public class CreateDocumentDTO {
     @Schema(name = "name", description = "文档名称")
     private String name;
 
-    @Schema(name = "content", description = "文档内容")
+    @Schema(name = "description", description = "文档简介")
     private String descriptions;
 
     @Schema(name = "keyword", description = "关键字")
     private String keyword;
 
-    @Schema(name = "type", description = "文档关键字")
+    @Schema(name = "type", description = "文档类别")
     private Integer type;
 
-    @Schema(name = "key", description = "s3的key")
+    @Schema(name = "key", description = "s3的key（上传成功后服务器返回的json中的data字段）")
     private String key;
 
-    @Schema(name = "prices", description = "价格")
+    @Schema(name = "price", description = "文档价格")
     private Double prices;
 
 

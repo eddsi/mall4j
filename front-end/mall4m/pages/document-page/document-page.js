@@ -3,7 +3,7 @@ var config = require('../../utils/config.js');
 Page({
     data: {
         description: '', // 文档简介
-        keywords: '', // 文档关键字
+        keyword: '', // 文档关键字
         file: null,
         isChecked: false // 用户是否勾选了同意协议
     },
@@ -73,7 +73,7 @@ Page({
         const {
             file,
             description,
-            keywords
+            keyword
         } = this.data;
 
         if (!file) {
@@ -100,7 +100,7 @@ Page({
                 const formData = {
                     file: base64Data, // 将文件数据作为 Base64 字符串传递
                     description: description,
-                    keywords: keywords
+                    keyword: keyword
                 };
 
                 const accessToken = wx.getStorageSync('token');
@@ -130,23 +130,23 @@ Page({
                             });
                         }
                     },
-                    fail: function (res) {
+                    fail: function () {
                         wx.showToast({
                             title: '上传失败',
                             icon: 'none'
                         });
                     },
-                    complete: function (res) {
+                    complete: function () {
                         wx.hideLoading();
                         that.setData({
                             file: null, // Reset selected file after upload
                             description: '', // Optionally reset other form fields
-                            keywords: ''
+                            keyword: ''
                         });
                     }
                 });
             },
-            fail: function (err) {
+            fail: function () {
                 wx.showToast({
                     title: '读取文件失败',
                     icon: 'none'
