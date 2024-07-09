@@ -33,6 +33,7 @@
   <view class="container-border">
     <view class="file-container">
       <view class="file-icon-and-name">
+        <text class="file-type">********以下是文档上传样例********</text>
         <image class="file-icon" src="../../images/icon/toTake.png"></image>
         <text>{{file.name}}</text>
         <view class="picker-container">
@@ -53,7 +54,7 @@
       <checkbox-group bindchange="checkboxChange">
         <label class="checkbox-label">
           <checkbox value="agree" color="#1b7dec" checked />
-          勾选我已阅读并同意用户协议和隐私政策
+          我已阅读并同意用户协议和隐私政策
         </label>
       </checkbox-group>
     </view>
