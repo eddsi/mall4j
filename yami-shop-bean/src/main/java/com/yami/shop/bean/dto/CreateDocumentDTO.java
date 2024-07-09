@@ -31,8 +31,8 @@ public class CreateDocumentDTO {
     @Schema(name = "key", description = "s3的key（上传成功后服务器返回的json中的data字段）")
     private String key;
 
-    @Schema(name = "price", description = "文档价格")
-    private Double prices;
+    @Schema(name = "price", description = "价格")
+    private Double price;
 
 
 }

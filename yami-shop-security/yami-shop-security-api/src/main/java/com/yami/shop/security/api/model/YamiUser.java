@@ -36,4 +36,6 @@ public class YamiUser {
      * 店铺Id
      */
     private Long shopId;
+
+    private String nickName;
 }

@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.yami.shop.bean.dto.CreateDocumentDTO;
 import com.yami.shop.bean.dto.DocumentSearchDTO;
+import com.yami.shop.bean.dto.document.AuditDocumentDTO;
 import com.yami.shop.bean.model.Document;
 import com.yami.shop.bean.vo.document.DocumentPageVO;
 
@@ -27,4 +28,7 @@ public interface DocumentService extends IService<Document> {
     void collectDocument(Long documentId, String userId);
 
     String upload(MultipartFile file);
+
+    void auditDocument(AuditDocumentDTO auditDocumentDTO);
+
 }

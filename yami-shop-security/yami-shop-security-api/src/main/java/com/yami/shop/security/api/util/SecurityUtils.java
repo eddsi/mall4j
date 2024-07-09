@@ -39,6 +39,7 @@ public class SecurityUtils {
         yamiUser.setEnabled(userInfoInTokenBO.getEnabled());
         yamiUser.setShopId(userInfoInTokenBO.getShopId());
         yamiUser.setStationId(userInfoInTokenBO.getOtherId());
+        yamiUser.setNickName(userInfoInTokenBO.getNickName());
         return yamiUser;
     }
 }
