@@ -5,8 +5,8 @@
       <text>{{file.name}}</text>
       <view class="picker-container">
           <view>
-            <input class="input" placeholder="文档定价" />
-            <input class="input" placeholder="请输入文档简介" />
+            <input class="input" placeholder="文档定价" bindinput="bindInput" data-field="price"/>
+            <input class="input" placeholder="请输入文档简介" bindinput="bindInput" data-field="description"/>
           </view>
           <picker mode="selector" range="{{ ['互联网/AI', '电子', '通讯'] }}" bindchange="pickerChange">
             <view class="picker">
