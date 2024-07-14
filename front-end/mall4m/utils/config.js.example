@@ -5,4 +5,4 @@ var uploadUrl = "";
 var createDocumentUrl = "";
 exports.domain = domain;
 exports.uploadUrl=uploadUrl;
-
+exports.createDocumentUrl=createDocumentUrl;
