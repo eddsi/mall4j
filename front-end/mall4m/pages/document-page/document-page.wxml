@@ -1,24 +1,36 @@
 <view class="page">
   <view class="file-container">
     <view wx:if="{{file}}" class="file-icon-and-name">
+    <view wx:if="{{priceError}}" class="error-message">{{priceErrorMessage}}</view>
       <image class="file-icon" src="../../images/icon/toTake.png"></image>
       <text>{{file.name}}</text>
       <view class="picker-container">
           <view>
-            <input class="input" placeholder="文档定价" bindinput="bindInput" data-field="price"/>
+            <input class="input" placeholder="文档定价" bindinput="handlePriceInput" data-field="price"/>
             <input class="input" placeholder="请输入文档简介" bindinput="bindInput" data-field="description"/>
           </view>
           <picker mode="selector" range="{{ ['互联网/AI', '电子', '通讯'] }}" bindchange="pickerChange">
             <view class="picker">
-              <input class="input" placeholder="请选择或输入关键字" disabled value="{{ keyword }}" />
+              <input class="input" placeholder="请选择行业关键字" disabled value="{{ keyword }}" />
             </view>
           </picker>
         </view>
     </view>
     <view wx:else>
-      <text class="file-type">《--------请从文档列表中选择文件--------》</text>
-      <button class="button" bindtap="chooseFile">选择文件</button>
-      <text class="file-type">仅支持PDF文件，文件大小不超过20M。</text>
+      <view class="file-type">
+        <text>-</text>
+        <text>---</text>
+        <text>------</text>
+        <text>---------</text>
+        <text>------------</text>
+        <text>---------------</text>
+        <text>------------------</text>
+      </view>
+      <view class="file-type">
+        <text>《请从文档列表中选择文件》</text>
+        <button class="button" bindtap="chooseFile">选择文件</button>
+        <text class="file-type">仅支持PDF文件，文件大小不超过20M。</text>
+      </view>
     </view>
   </view>
   <view class="agreement">
@@ -31,32 +43,4 @@
   </view>
   <button class="button" bindtap="uploadFile">上传文档</button>
 
-  <view class="container-border">
-    <view class="file-container">
-      <view class="file-icon-and-name">
-        <text class="file-type">********以下是文档上传样例********</text>
-        <image class="file-icon" src="../../images/icon/toTake.png"></image>
-        <text>{{file.name}}</text>
-        <view class="picker-container">
-          <view>
-            <input class="input" placeholder="这份文档介绍AI的概念" />
-          </view>
-          <picker mode="selector" range="{{ ['互联网/AI'] }}" >
-            <view class="picker">
-              <input class="input" placeholder="互联网/AI" disabled value="{{ keyword }}" />
-            </view>
-          </picker>
-        </view>
-      </view>
-    </view>
-    <view class="agreement">
-      <checkbox-group bindchange="checkboxChange">
-        <label class="checkbox-label">
-          <checkbox value="agree" color="#1b7dec" checked />
-          我已阅读并同意用户协议和隐私政策
-        </label>
-      </checkbox-group>
-    </view>
-    <button class="button" bindtap="uploadFile">点击此处上传文档</button>
-  </view>
 </view>
