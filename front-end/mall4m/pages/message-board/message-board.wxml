@@ -1,0 +1,25 @@
+<view class="container">
+  <view class="form">
+    <textarea bindinput="onInput" placeholder="写下你的留言..." value="{{ newMessage }}" />
+    <button bindtap="submitMessage">提交留言</button>
+  </view>
+  
+  <view class="message-list">
+    <block wx:for="{{ messages }}" wx:key="id">
+      <view class="message-item">
+        <text class="creator">{{ item.creator }}</text>
+        <text class="content">{{ item.content }}</text>
+        <button bindtap="toggleReplies" data-id="{{ item.id }}">查看回复</button>
+        
+        <view wx:if="{{ item.showReplies }}" class="replies">
+          <block wx:for="{{ item.children }}" wx:key="id">
+            <view class="message-item reply-item">
+              <text class="creator">{{ item.creator }}</text>
+              <text class="content">{{ item.content }}</text>
+            </view>
+          </block>
+        </view>
+      </view>
+    </block>
+  </view>
+</view>
