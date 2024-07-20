@@ -1,6 +1,5 @@
 var config = require('../../utils/config.js');
-// const CryptoJS = require('crypto-js');
-// const md5 = require('crypto-js/md5');
+import { encrypt } from '../../utils/crypto.js';
 
 Page({
     data: {
@@ -117,7 +116,7 @@ Page({
             encoding: 'base64',
             success: function (res) {
                 const base64Data = res.data;
-                const md5Hash = md5(base64Data).toString(CryptoJS.enc.Hex);
+                const md5Hash = encrypt(base64Data);
                 // 构建 formData 对象
                 const formData = {
                     file: base64Data
