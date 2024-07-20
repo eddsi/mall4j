@@ -1,6 +1,6 @@
 var config = require('../../utils/config.js');
-const CryptoJS = require('crypto-js');
-const md5 = require('crypto-js/md5');
+// const CryptoJS = require('crypto-js');
+// const md5 = require('crypto-js/md5');
 
 Page({
     data: {
@@ -8,7 +8,11 @@ Page({
         keyword: '', // 文档关键字
         file: null,
         isChecked: false, // 用户是否勾选了同意协议
-        price: ''
+        price: '',
+        priceError: false,
+        priceErrorMessage: '请输入有效的价格',
+        minPrice: 1, // 最小价格
+        maxPrice: 1000 // 最大价格
     },
     pickerChange(e) {
         const index = e.detail.value; // 获取选中的索引
@@ -29,6 +33,21 @@ Page({
         this.setData({
             [e.currentTarget.dataset.field]: e.detail.value
         });
+    },
+
+    // 价格输入框数据
+    handlePriceInput: function (e) {
+        let price = e.detail.value;
+        if (!isNaN(price) && price >= this.data.minPrice && price <= this.data.maxPrice) {
+            this.setData({
+            price: price,
+            priceError: false
+            });
+        } else {
+            this.setData({
+            priceError: true
+            });
+        }
     },
 
     // 用户选择文件
