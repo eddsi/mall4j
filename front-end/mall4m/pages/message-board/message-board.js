@@ -1,113 +1,97 @@
+// pages/messageBoard/messageBoard.js
+const app = getApp();
+
 Page({
-    data: {
-        newMessage: '',
-        messages: []
-    },
+  data: {
+    messages: [],
+    newMessage: '',
+    baseUrl: app.globalData.apiBaseUrl,
+    page: 1,
+    pageSize: 10,
+  },
 
-    onInput(e) {
-        this.setData({
-            newMessage: e.detail.value
-        });
-    },
+  onLoad: function () {
+    this.loadMessages();
+  },
 
-    submitMessage() {
-        const that = this;
-        const {newMessage} = this.data;
-
-        if (!newMessage.trim()) {
-            wx.showToast({
-                title: '留言内容不能为空',
-                icon: 'none'
-            });
-            return;
+  loadMessages: function () {
+    const {
+      baseUrl,
+      page,
+      pageSize
+    } = this.data;
+    wx.request({
+      url: `${baseUrl}`,
+      method: 'GET',
+      data: {
+        page: page,
+        pageSize: pageSize
+      },
+      success: res => {
+        if (res.data.success) {
+          this.setData({
+            messages: res.data.data.records
+          });
         }
+      },
+      fail: err => {
+        console.error(err);
+      }
+    });
+  },
 
-        wx.request({
-            url: 'https://your-api-url/p/message-board', // 替换为实际的API URL
-            method: 'POST',
-            data: {
-                content: newMessage
-            },
-            success(res) {
-                if (res.statusCode === 200) {
-                    that.setData({
-                        newMessage: ''
-                    });
-                    that.fetchMessages();
-                } else {
-                    wx.showToast({
-                        title: '提交失败',
-                        icon: 'none'
-                    });
-                }
-            }
-        });
-    },
+  loadChildMessages: function (messageId) {
+    const {
+      baseUrl
+    } = this.data;
+    wx.request({
+      url: `${baseUrl}/message/child`,
+      method: 'GET',
+      data: {
+        messageId: messageId
+      },
+      success: res => {
+        if (res.data.success) {
+          // 处理子留言逻辑
+        }
+      },
+      fail: err => {
+        console.error(err);
+      }
+    });
+  },
 
-    fetchMessages() {
-        const that = this;
+  handleInputChange: function (e) {
+    this.setData({
+      newMessage: e.detail.value
+    });
+  },
 
-        wx.request({
-            url: 'https://your-api-url/p/message-board', // 替换为实际的API URL
-            method: 'GET',
-            success(res) {
-                if (res.statusCode === 200) {
-                    that.setData({
-                        messages: res.data.map(message => ({
-                            ...message,
-                            showReplies: false,
-                            children: []
-                        }))
-                    });
-                } else {
-                    wx.showToast({
-                        title: '加载失败',
-                        icon: 'none'
-                    });
-                }
-            }
-        });
-    },
+  submitMessage: function () {
+    const {
+      baseUrl,
+      newMessage
+    } = this.data;
+    const userId = 'your-bizUserId'; // 获取用户ID的逻辑
 
-    toggleReplies(e) {
-        const id = e.currentTarget.dataset.id;
-        const messages = this.data.messages.map(message => {
-            if (message.id === id) {
-                if (message.showReplies) {
-                    return {...message, showReplies: false};
-                } else {
-                    wx.request({
-                        url: `https://your-api-url/p/message-board/message/child?messageId=${id}`, // 替换为实际的API URL
-                        method: 'GET',
-                        success(res) {
-                            if (res.statusCode === 200) {
-                                const children = res.data;
-                                const updatedMessages = this.data.messages.map(msg =>
-                                    msg.id === id ? {...msg, children, showReplies: true} : msg
-                                );
-                                this.setData({
-                                    messages: updatedMessages
-                                });
-                            } else {
-                                wx.showToast({
-                                    title: '加载回复失败',
-                                    icon: 'none'
-                                });
-                            }
-                        }
-                    });
-                    return {...message, showReplies: true};
-                }
-            }
-            return message;
-        });
-
-        this.setData({
-            messages
-        });
-    },
-
-    onLoad() {
-        this.fetchMessages();
-    }
+    wx.request({
+      url: `${baseUrl}`,
+      method: 'POST',
+      data: {
+        content: newMessage,
+        bizUserId: userId
+      },
+      success: res => {
+        if (res.data.success) {
+          this.setData({
+            newMessage: ''
+          });
+          this.loadMessages();
+        }
+      },
+      fail: err => {
+        console.error(err);
+      }
+    });
+  }
 });
