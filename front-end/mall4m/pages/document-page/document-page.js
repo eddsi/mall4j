@@ -1,18 +1,24 @@
 var config = require('../../utils/config.js');
+import { encrypt } from '../../utils/crypto.js';
 
 Page({
     data: {
         description: '', // 文档简介
         keyword: '', // 文档关键字
         file: null,
-        isChecked: false // 用户是否勾选了同意协议
+        isChecked: false, // 用户是否勾选了同意协议
+        price: '',
+        priceError: false,
+        priceErrorMessage: '请输入有效的价格',
+        minPrice: 1, // 最小价格
+        maxPrice: 1000 // 最大价格
     },
     pickerChange(e) {
-      const index = e.detail.value; // 获取选中的索引
-      const selectedKeyword = ['互联网/AI', '电子', '通讯'][index]; // 根据索引获取选中的关键字
-      this.setData({
-        keyword: selectedKeyword // 更新关键字的值
-      });
+        const index = e.detail.value; // 获取选中的索引
+        const selectedKeyword = ['互联网/AI', '电子', '通讯'][index]; // 根据索引获取选中的关键字
+        this.setData({
+            keyword: selectedKeyword // 更新关键字的值
+        });
     },
     // 处理复选框变更
     checkboxChange: function (e) {
@@ -26,6 +32,21 @@ Page({
         this.setData({
             [e.currentTarget.dataset.field]: e.detail.value
         });
+    },
+
+    // 价格输入框数据
+    handlePriceInput: function (e) {
+        let price = e.detail.value;
+        if (!isNaN(price) && price >= this.data.minPrice && price <= this.data.maxPrice) {
+            this.setData({
+            price: price,
+            priceError: false
+            });
+        } else {
+            this.setData({
+            priceError: true
+            });
+        }
     },
 
     // 用户选择文件
@@ -73,9 +94,9 @@ Page({
         const {
             file,
             description,
-            keyword
+            keyword,
+            price,
         } = this.data;
-
         if (!file) {
             wx.showToast({
                 title: '请先选择文件',
@@ -95,12 +116,10 @@ Page({
             encoding: 'base64',
             success: function (res) {
                 const base64Data = res.data;
-
+                const md5Hash = encrypt(base64Data);
                 // 构建 formData 对象
                 const formData = {
-                    file: base64Data, // 将文件数据作为 Base64 字符串传递
-                    description: description,
-                    keyword: keyword
+                    file: base64Data
                 };
 
                 const accessToken = wx.getStorageSync('token');
@@ -116,13 +135,38 @@ Page({
                     success: function (res) {
                         let data = JSON.parse(res.data);
                         if (data.success === true) {
-                            wx.showToast({
-                                title: '上传成功',
-                                icon: 'success'
+                            let requestData = {
+                                name: md5Hash,
+                                key: data.data,
+                                price: price,
+                                description: description,
+                                keyword: keyword
+                            };
+                            wx.request({
+                                url: config.createDocumentUrl,
+                                method: 'POST',
+                                header: {
+                                    "content-type": "application/json",
+                                    "Authorization": `${accessToken}`
+                                },
+                                data: requestData,
+                                success: function () {
+                                    wx.showToast({
+                                        title: '上传成功，请稍等，页面即将跳转',
+                                        icon: 'success'
+                                    });
+                                    setTimeout(function () {
+                                        wx.navigateBack();
+                                    }, 1000);
+                                },
+                                fail: function () {
+                                    wx.showToast({
+                                        title: '调用新建文档接口失败，请稍后重试',
+                                        icon: 'none'
+                                    });
+                                }
                             });
-                            setTimeout(function () {
-                                wx.navigateBack();
-                            }, 1000);
+
                         } else {
                             wx.showToast({
                                 title: '上传失败',
@@ -132,7 +176,7 @@ Page({
                     },
                     fail: function () {
                         wx.showToast({
-                            title: '上传失败',
+                            title: '调用上传文件接口失败',
                             icon: 'none'
                         });
                     },

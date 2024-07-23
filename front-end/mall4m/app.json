@@ -20,7 +20,8 @@
         "pages/prod-classify/prod-classify",
         "pages/recent-news/recent-news",
         "pages/news-detail/news-detail",
-        "pages/document-page/document-page"
+        "pages/document-page/document-page",
+        "pages/message-board/message-board"
     ],
     "window": {
         "backgroundTextStyle": "light",

@@ -1,0 +1,17 @@
+<!-- pages/messageBoard/messageBoard.wxml -->
+<view class="container">
+  <view class="input-container">
+    <textarea placeholder="请输入留言" bindinput="handleInputChange" value="{{newMessage}}"></textarea>
+    <button bindtap="submitMessage">提交</button>
+  </view>
+  <view class="messages-container">
+    <block wx:for="{{messages}}" wx:key="id">
+      <view class="message">
+        <text>{{item.content}}</text>
+        <view class="child-messages">
+          <!-- 子留言处理 -->
+        </view>
+      </view>
+    </block>
+  </view>
+</view>

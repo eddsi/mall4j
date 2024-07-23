@@ -1,5 +1,6 @@
 package com.yami.shop.api.controller;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -31,6 +32,7 @@ import jakarta.annotation.Resource;
 @Schema(name = "MessageBoardController", description = "留言板")
 @RestController
 @RequestMapping("/p/message-board")
+@Tag(name = "留言板接口")
 public class MessageBoardController {
 
     @Resource
@@ -49,6 +51,7 @@ public class MessageBoardController {
         return ServerResponseEntity.success(messageBoardService.getMessageBoard(basePage));
     }
 
+    @Operation(summary = "查看留言的子留言", description = "根据留言的消息ID查看其所有子留言")
     @GetMapping("/message/child")
     public ServerResponseEntity<IPage<MessageBoardDTO>> getMessageBoardChild(BasePage basePage,@RequestParam(required = true) Long messageId) {
         return ServerResponseEntity.success(messageBoardService.getMessageBoardChild(basePage,messageId));
