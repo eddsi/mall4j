@@ -1,7 +1,7 @@
 package com.yami.shop.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.yami.shop.bean.model.UserDocument;
+import com.yami.shop.bean.model.UserBuy;
 
 /**
  * @Author：T3yes
@@ -13,5 +13,5 @@ import com.yami.shop.bean.model.UserDocument;
  * @Description:
  */
 
-public interface UserDocumentService extends IService<UserDocument> {
+public interface UserBuyService extends IService<UserBuy> {
 }

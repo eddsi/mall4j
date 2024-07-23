@@ -10,6 +10,7 @@
 
 package com.yami.shop.api.controller;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -20,13 +21,16 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.yami.shop.bean.app.dto.ProductDto;
 import com.yami.shop.bean.app.dto.TagProductDto;
+import com.yami.shop.bean.dto.prod.ProdSaveVO;
 import com.yami.shop.bean.model.Product;
-import com.yami.shop.bean.param.ProductParam;
 import com.yami.shop.common.response.ServerResponseEntity;
+import com.yami.shop.common.util.MinioUtils;
 import com.yami.shop.common.util.PageParam;
 import com.yami.shop.security.api.model.YamiUser;
 import com.yami.shop.security.api.util.SecurityUtils;
@@ -43,68 +47,69 @@ import jakarta.validation.Valid;
  * @author lgh on 2018/11/26.
  */
 @RestController
-@RequestMapping("/prod")
+@RequestMapping("/p/prod")
 @Tag(name = "商品接口")
 public class ProdController {
 
     @Autowired
     private ProductService prodService;
+    @Autowired
+    private MinioUtils minioUtils;
 
 
     @GetMapping("/pageProd")
-    @Operation(summary = "通过分类id商品列表信息", description = "根据分类ID获取该分类下所有的商品列表信息")
+    @Operation(summary = "商品列表信息", description = "商品列表信息")
     @Parameters({
-            @Parameter(name = "categoryId", description = "分类ID", required = true),
+            @Parameter(name = "categoryId", description = "分类ID", required = false),
     })
     public ServerResponseEntity<IPage<ProductDto>> prodList(
-            @RequestParam(value = "categoryId") Long categoryId, PageParam<ProductDto> page) {
-        IPage<ProductDto> productPage = prodService.pageByCategoryId(page, categoryId);
+            @RequestParam(value = "categoryId", required = false) Long categoryId, PageParam<ProductDto> page,
+            String keyWord) {
+        IPage<ProductDto> productPage = prodService.pageByCategoryId(page, categoryId, keyWord);
         return ServerResponseEntity.success(productPage);
     }
 
-    @PostMapping
-    public ServerResponseEntity<String> save(@Valid @RequestBody ProductParam productParam) {
+    @PostMapping("/addDocument")
+    public ServerResponseEntity<String> save(@Valid @RequestBody ProdSaveVO productParam) {
         //        checkParam(productParam);
         YamiUser user = SecurityUtils.getUser();
         Product product = BeanUtil.copyProperties(productParam, Product.class);
         product.setAuthor(user.getUserName());
         product.setShopId(1L);
+        //暂时先设置成九万份
+        product.setTotalStocks(99999);
         product.setUpdateTime(new Date());
-        if (product.getStatus() == 1) {
-            product.setPutawayTime(new Date());
-        }
+        //        if (product.getStatus() == 1) {
+        //            product.setPutawayTime(new Date());
+        //        }
         product.setCreateTime(new Date());
         prodService.saveProduct(product);
         return ServerResponseEntity.success();
     }
 
+    @PostMapping("/upload")
+    @Operation(summary = "上传文档", description = "上传文档")
+    public ServerResponseEntity<String> uploadDocument(MultipartFile file) {
+        return ServerResponseEntity.success(prodService.upload(file));
+    }
+
+
     @GetMapping("/prodInfo")
     @Operation(summary = "商品详情信息", description = "根据商品ID（prodId）获取商品信息")
     @Parameter(name = "prodId", description = "商品ID", required = true)
     public ServerResponseEntity<ProductDto> prodInfo(Long prodId) {
-
-        Product product = prodService.getProductByProdId(prodId);
+        String userName = SecurityUtils.getUser().getNickName();
+        Product product = prodService.getProductByProdIdAndUserName(prodId, userName);
         if (product == null) {
             return ServerResponseEntity.success();
         }
 
-        //        List<Sku> skuList = skuService.listByProdId(prodId);
-        // 启用的sku列表
-        //        List<Sku> useSkuList = skuList.stream().filter(sku -> sku.getStatus() == 1).collect(Collectors
-        //        .toList());
-        //        product.setSkuList(useSkuList);
         ProductDto productDto = BeanUtil.copyProperties(product, ProductDto.class);
-
-
-        // 商品的配送方式
-        //        Product.DeliveryModeVO deliveryModeVO =
-        //                Json.parseObject(product.getDeliveryMode(), Product.DeliveryModeVO.class);
-        // 有店铺配送的方式, 且存在运费模板，才返回运费模板的信息，供前端查阅
-        //        if (deliveryModeVO.getHasShopDelivery()  && product.getDeliveryTemplateId() != null) {
-        //            Transport transportAndAllItems = transportService.getTransportAndAllItems(product
-        //            .getDeliveryTemplateId());
-        //            productDto.setTransport(transportAndAllItems);
-        //        }
+        List<String> list = new ArrayList<>();
+        for (String s : JSON.parseArray(product.getFilePhotos(), String.class)) {
+            list.add(minioUtils.getObjectPreviewUrl(s));
+        }
+        productDto.setFilePhotos(list);
 
         return ServerResponseEntity.success(productDto);
     }

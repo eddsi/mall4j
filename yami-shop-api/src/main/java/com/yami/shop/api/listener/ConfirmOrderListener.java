@@ -10,6 +10,10 @@
 
 package com.yami.shop.api.listener;
 
+import org.springframework.context.event.EventListener;
+import org.springframework.core.annotation.Order;
+import org.springframework.stereotype.Component;
+
 import com.yami.shop.bean.app.dto.ShopCartItemDto;
 import com.yami.shop.bean.app.dto.ShopCartOrderDto;
 import com.yami.shop.bean.app.param.OrderParam;
@@ -25,13 +29,12 @@ import com.yami.shop.service.ProductService;
 import com.yami.shop.service.SkuService;
 import com.yami.shop.service.TransportManagerService;
 import com.yami.shop.service.UserAddrService;
+
 import lombok.AllArgsConstructor;
-import org.springframework.context.event.EventListener;
-import org.springframework.core.annotation.Order;
-import org.springframework.stereotype.Component;
 
 /**
  * 确认订单信息时的默认操作
+ *
  * @author LGH
  */
 @Component("defaultConfirmOrderListener")

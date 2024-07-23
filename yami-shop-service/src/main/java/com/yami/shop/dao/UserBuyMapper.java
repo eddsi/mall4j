@@ -3,7 +3,7 @@ package com.yami.shop.dao;
 import org.apache.ibatis.annotations.Mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.yami.shop.bean.model.UserDocument;
+import com.yami.shop.bean.model.UserBuy;
 
 /**
  * @Author：T3yes
@@ -15,5 +15,5 @@ import com.yami.shop.bean.model.UserDocument;
  * @Description:
  */
 @Mapper
-public interface UserDocumentMapper extends BaseMapper<UserDocument> {
+public interface UserBuyMapper extends BaseMapper<UserBuy> {
 }

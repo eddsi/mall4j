@@ -10,23 +10,32 @@
 
 package com.yami.shop.admin.controller;
 
+import java.util.Date;
+import java.util.Objects;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.yami.shop.bean.model.IndexImg;
 import com.yami.shop.bean.model.Product;
 import com.yami.shop.common.exception.YamiShopBindException;
+import com.yami.shop.common.response.ServerResponseEntity;
 import com.yami.shop.common.util.PageParam;
 import com.yami.shop.security.admin.util.SecurityUtils;
 import com.yami.shop.service.IndexImgService;
 import com.yami.shop.service.ProductService;
-import org.springframework.beans.factory.annotation.Autowired;
-import com.yami.shop.common.response.ServerResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.*;
 
 import jakarta.validation.Valid;
-import java.util.Date;
-import java.util.Objects;
 
 /**
  * @author lgh on 2018/11/26.
@@ -64,7 +73,7 @@ public class IndexImgController {
         Long shopId = SecurityUtils.getSysUser().getShopId();
         IndexImg indexImg = indexImgService.getOne(new LambdaQueryWrapper<IndexImg>().eq(IndexImg::getShopId, shopId).eq(IndexImg::getImgId, imgId));
         if (Objects.nonNull(indexImg.getRelation())) {
-            Product product = productService.getProductByProdId(indexImg.getRelation());
+            Product product = productService.getProductByProdId(indexImg.getRelation(), );
             indexImg.setPic(product.getPic());
             indexImg.setProdName(product.getProdName());
         }

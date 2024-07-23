@@ -39,11 +39,11 @@ public class ProdSaveVO {
     @NotNull(message = "请输入商品原价")
     private Double oriPrice;
 
-    /**
-     * 库存量
-     */
-    @NotNull(message = "请输入商品库存")
-    private Integer totalStocks;
+    //    /**
+    //     * 库存量
+    //     */
+    //    @NotNull(message = "请输入商品库存")
+    //    private Integer totalStocks;
 
     /**
      * 简要描述,卖点等
@@ -52,6 +52,12 @@ public class ProdSaveVO {
     @Size(max = 500, message = "商品描述长度应该小于{max}")
     private String brief;
 
+
+    @Schema(description = "原始的S3的key")
+    private String originalKey;
+
+    @Schema(description = "关键字")
+    private String keyWord;
 
     /**
      * 商品分类

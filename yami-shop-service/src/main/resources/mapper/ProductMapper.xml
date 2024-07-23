@@ -67,22 +67,26 @@
     </sql>
 
     <update id="updateStocks" parameterType="com.yami.shop.bean.model.Product">
-		update tz_prod set total_stocks = total_stocks - #{prod.totalStocks} ,version = version + 1 where prod_id = #{prod.prodId} and #{prod.totalStocks} &lt;= total_stocks
-	</update>
+        update tz_prod set total_stocks = total_stocks - #{prod.totalStocks} ,version = version + 1 where prod_id =
+        #{prod.prodId} and #{prod.totalStocks} &lt;= total_stocks
+    </update>
 
     <select id="pageByCategoryId" resultType="com.yami.shop.bean.app.dto.ProductDto">
-        select tp.*,tc.category_name,tsd.shop_name from tz_prod tp
+        select tp.*,tc.category_name, tc.category_name as categoryName from tz_prod tp
         left join tz_category tc on tp.category_id = tc.category_id
-        left join tz_shop_detail tsd on tp.shop_id = tsd.shop_id
+        <!--        left join tz_shop_detail tsd on tp.shop_id = tsd.shop_id-->
         where tp.status = 1
         <if test="categoryId != null">
             AND tp.category_id = #{categoryId}
         </if>
+        <if test="keyWord !=null">
+            AND tp.key_word like concat ('%',#{keyWord},'%')
+        </if>
     </select>
 
     <select id="getProductByProdNameAndShopId" resultType="com.yami.shop.bean.model.Product">
-	   select * from tz_prod where prod_name = #{prodName} and shop_id = #{shopId}
-	</select>
+        select * from tz_prod where prod_name = #{prodName} and shop_id = #{shopId}
+    </select>
 
     <update id="returnStock">
         <foreach collection="prodCollect" item="changeStocks" index="prodId" separator=";">

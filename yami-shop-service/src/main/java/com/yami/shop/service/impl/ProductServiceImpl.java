@@ -10,10 +10,19 @@
 
 package com.yami.shop.service.impl;
 
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
+import javax.imageio.ImageIO;
+
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.rendering.PDFRenderer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +31,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -33,6 +43,9 @@ import com.yami.shop.bean.dto.SearchProdDto;
 import com.yami.shop.bean.model.ProdTagReference;
 import com.yami.shop.bean.model.Product;
 import com.yami.shop.bean.model.Sku;
+import com.yami.shop.bean.model.UserBuy;
+import com.yami.shop.common.exception.YamiShopBindException;
+import com.yami.shop.common.response.ResponseEnum;
 import com.yami.shop.common.util.Arith;
 import com.yami.shop.common.util.MinioUtils;
 import com.yami.shop.common.util.PageParam;
@@ -41,9 +54,13 @@ import com.yami.shop.dao.ProductMapper;
 import com.yami.shop.dao.SkuMapper;
 import com.yami.shop.service.AttachFileService;
 import com.yami.shop.service.ProductService;
+import com.yami.shop.service.UserBuyService;
 
 import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.util.RandomUtil;
+import cn.hutool.json.JSONUtil;
 import io.netty.channel.DefaultEventLoopGroup;
+import lombok.SneakyThrows;
 
 /**
  * @author lanhai
@@ -59,6 +76,8 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
     @Autowired
     private AttachFileService attachFileService;
     @Autowired
+    private UserBuyService userBuyService;
+    @Autowired
     private ProdTagReferenceMapper prodTagReferenceMapper;
     @Autowired
     private MinioUtils minioUtils;
@@ -67,14 +86,44 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void saveProduct(Product product) {
-        //TODO 记得删除一下模板和收货信息
-        productMapper.insert(product);
-        if (CollectionUtil.isNotEmpty(product.getSkuList())) {
-            skuMapper.insertBatch(product.getProdId(), product.getSkuList());
-        }
-        prodTagReferenceMapper.insertBatch(product.getShopId(), product.getProdId(), product.getTagList());
+        defaultEventExecutor.submit(() -> {
+                    log.info("开始创建...");
+                    byte[] objectData = minioUtils.getObjectData(product.getOriginalKey());
+                    ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(objectData);
+                    List<String> pdfKeys = getPdfKeys(byteArrayInputStream);
+                    product.setFilePhotos(JSONUtil.toJsonStr(pdfKeys));
+                }
+        ).addListener(future -> {
+            if (future.isSuccess()) {
+                save(product);
+            }
+        });
+        //        if (CollectionUtil.isNotEmpty(product.getSkuList())) {
+        //            skuMapper.insertBatch(product.getProdId(), product.getSkuList());
+        //        }
+        //        prodTagReferenceMapper.insertBatch(product.getShopId(), product.getProdId(), product.getTagList());
         //异步处理
 
+    }
+
+    @SneakyThrows
+    public List<String> getPdfKeys(InputStream inputStream) {
+        List<String> pdfs = new ArrayList<>();
+        PDDocument document = PDDocument.load(inputStream);
+        PDFRenderer pdfRenderer = new PDFRenderer(document);
+        int numberOfPages = document.getNumberOfPages();
+        for (int i = 0; i < numberOfPages; ++i) {
+            BufferedImage bim = pdfRenderer.renderImageWithDPI(i, 300);
+            ByteArrayOutputStream os = new ByteArrayOutputStream();
+            ImageIO.write(bim, "JPEG", os);
+            byte[] imageBytes = os.toByteArray();
+            InputStream in = new ByteArrayInputStream(imageBytes);
+            String upload = minioUtils.upload(in, RandomUtil.randomString(6) + "pdf/" + i + ".jpg", os.size());
+            pdfs.add(upload);
+            log.info("pdf转图片成功:{}", upload);
+        }
+        document.close();
+        return pdfs;
     }
 
     @Override
@@ -125,6 +174,20 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
     @Override
     @Cacheable(cacheNames = "product", key = "#prodId")
     public Product getProductByProdId(Long prodId) {
+        //查看是否已经购买,只有购买者和作者能够查看详情
+        return productMapper.selectById(prodId);
+    }
+
+    @Override
+    //    @Cacheable(cacheNames = "product", key = "#prodId")
+    public Product getProductByProdIdAndUserName(Long prodId, String userName) {
+        //查看是否已经购买,只有购买者和作者能够查看详情
+        UserBuy one = userBuyService.lambdaQuery().
+                eq(UserBuy::getUserName, userName).eq(UserBuy::getProdId, prodId)
+                .one();
+        if (Objects.isNull(one)) {
+            throw new YamiShopBindException(ResponseEnum.NO_BUY);
+        }
         return productMapper.selectById(prodId);
     }
 
@@ -180,8 +243,8 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
     }
 
     @Override
-    public IPage<ProductDto> pageByCategoryId(Page<ProductDto> page, Long categoryId) {
-        return productMapper.pageByCategoryId(page, categoryId);
+    public IPage<ProductDto> pageByCategoryId(Page<ProductDto> page, Long categoryId, String keyWord) {
+        return productMapper.pageByCategoryId(page, categoryId, keyWord);
     }
 
     @Override
@@ -209,6 +272,11 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
     @Override
     public IPage<ProductDto> collectionProds(PageParam page, String userId) {
         return productMapper.collectionProds(page, userId);
+    }
+
+    @Override
+    public String upload(MultipartFile file) {
+        return minioUtils.uploadMultipartFileDown(file);
     }
 
 

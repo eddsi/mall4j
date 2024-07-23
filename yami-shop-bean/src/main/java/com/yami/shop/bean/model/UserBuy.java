@@ -11,26 +11,27 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
 /**
-* 
-* @TableName user_document
-*/
+ * @TableName user_document
+ */
 @Data
-@TableName(value = "user_document")
-public class UserDocument implements Serializable {
+@TableName(value = "user_buy")
+public class UserBuy implements Serializable {
 
     @TableId(type = IdType.AUTO)
     private Long id;
     /**
-    * 用户id
-    */
+     * 用户id
+     */
     private Long userId;
+
+    private String userName;
     /**
-    * 文档id
-    */
-    private Long documentId;
+     * 文档id
+     */
+    private Long prodId;
     /**
-    * 创建时间
-    */
+     * 创建时间
+     */
     private Date createTime;
 
 

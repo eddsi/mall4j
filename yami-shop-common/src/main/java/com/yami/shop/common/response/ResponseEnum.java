@@ -39,6 +39,7 @@ public enum ResponseEnum {
      * 服务器出了点小差
      */
     EXCEPTION("A00005", "服务器出了点小差"),
+    NO_BUY("A00006", "用户未购买该产品！"),
     /**
      * 方法参数没有校验，内容由输入内容决定
      */
@@ -48,17 +49,17 @@ public enum ResponseEnum {
 
     private final String msg;
 
+    ResponseEnum(String code, String msg) {
+        this.code = code;
+        this.msg = msg;
+    }
+
     public String value() {
         return code;
     }
 
     public String getMsg() {
         return msg;
-    }
-
-    ResponseEnum(String code, String msg) {
-        this.code = code;
-        this.msg = msg;
     }
 
     @Override

@@ -10,21 +10,30 @@
 
 package com.yami.shop.service.impl;
 
-import cn.hutool.core.collection.CollectionUtil;
+import java.util.List;
+import java.util.Objects;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.yami.shop.bean.app.dto.ProductItemDto;
 import com.yami.shop.bean.enums.TransportChargeType;
-import com.yami.shop.bean.model.*;
+import com.yami.shop.bean.model.Area;
+import com.yami.shop.bean.model.Product;
+import com.yami.shop.bean.model.Sku;
+import com.yami.shop.bean.model.Transfee;
+import com.yami.shop.bean.model.TransfeeFree;
+import com.yami.shop.bean.model.Transport;
+import com.yami.shop.bean.model.UserAddr;
 import com.yami.shop.common.util.Arith;
 import com.yami.shop.common.util.Json;
 import com.yami.shop.service.ProductService;
 import com.yami.shop.service.SkuService;
 import com.yami.shop.service.TransportManagerService;
 import com.yami.shop.service.TransportService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Objects;
+import cn.hutool.core.collection.CollectionUtil;
+
 /**
  * @author lanhai
  */
@@ -44,7 +53,8 @@ public class TransportManagerServiceImpl implements TransportManagerService {
         // 用户所在城市id
         Long cityId = userAddr.getCityId();
 
-        Product.DeliveryModeVO deliveryModeVO = Json.parseObject(product.getDeliveryMode(), Product.DeliveryModeVO.class);
+        Product.DeliveryModeVO deliveryModeVO =
+                Json.parseObject(product.getDeliveryMode(), Product.DeliveryModeVO.class);
 
         // 没有店铺配送的方式
         if (!deliveryModeVO.getHasShopDelivery()) {
@@ -79,8 +89,10 @@ public class TransportManagerServiceImpl implements TransportManagerService {
                     }
                     //包邮方式 （0 满x件/重量/体积包邮 1满金额包邮 2满x件/重量/体积且满金额包邮）
                     boolean isFree = (transfeeFree.getFreeType() == 0 && piece >= transfeeFree.getPiece()) ||
-                            (transfeeFree.getFreeType() == 1 && productItem.getProductTotalAmount() >= transfeeFree.getAmount()) ||
-                            (transfeeFree.getFreeType() == 2 && piece >= transfeeFree.getPiece() && productItem.getProductTotalAmount() >= transfeeFree.getAmount());
+                            (transfeeFree.getFreeType() == 1
+                                    && productItem.getProductTotalAmount() >= transfeeFree.getAmount()) ||
+                            (transfeeFree.getFreeType() == 2 && piece >= transfeeFree.getPiece()
+                                    && productItem.getProductTotalAmount() >= transfeeFree.getAmount());
                     if (isFree) {
                         return 0.0;
                     }

@@ -10,12 +10,20 @@
 
 package com.yami.shop.service.impl;
 
-import cn.hutool.core.collection.CollectionUtil;
-import cn.hutool.core.util.StrUtil;
-import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.context.ApplicationContext;
+import org.springframework.stereotype.Service;
+
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.google.common.collect.Lists;
-import com.yami.shop.bean.app.dto.*;
+import com.yami.shop.bean.app.dto.ShopCartDto;
+import com.yami.shop.bean.app.dto.ShopCartItemDto;
 import com.yami.shop.bean.app.param.ChangeShopCartParam;
 import com.yami.shop.bean.app.param.OrderItemParam;
 import com.yami.shop.bean.app.param.ShopCartParam;
@@ -31,13 +39,10 @@ import com.yami.shop.service.BasketService;
 import com.yami.shop.service.ProductService;
 import com.yami.shop.service.ShopDetailService;
 import com.yami.shop.service.SkuService;
-import lombok.AllArgsConstructor;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.context.ApplicationContext;
-import org.springframework.stereotype.Service;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.util.StrUtil;
+import lombok.AllArgsConstructor;
 
 /**
  * @author lgh on 2018/10/18.
@@ -99,7 +104,8 @@ public class BasketServiceImpl extends ServiceImpl<BasketMapper, Basket> impleme
         }
         shopCartItemDtoList = basketMapper.getShopCartItems(userId);
         for (ShopCartItemDto shopCartItemDto : shopCartItemDtoList) {
-            shopCartItemDto.setProductTotalAmount(Arith.mul(shopCartItemDto.getProdCount(), shopCartItemDto.getPrice()));
+            shopCartItemDto.setProductTotalAmount(
+                    Arith.mul(shopCartItemDto.getProdCount(), shopCartItemDto.getPrice()));
         }
         cacheManagerUtil.putCache("ShopCartItems", userId, shopCartItemDtoList);
         return shopCartItemDtoList;
@@ -136,7 +142,8 @@ public class BasketServiceImpl extends ServiceImpl<BasketMapper, Basket> impleme
     @Override
     public List<ShopCartDto> getShopCarts(List<ShopCartItemDto> shopCartItems) {
         // 根据店铺ID划分item
-        Map<Long, List<ShopCartItemDto>> shopCartMap = shopCartItems.stream().collect(Collectors.groupingBy(ShopCartItemDto::getShopId));
+        Map<Long, List<ShopCartItemDto>> shopCartMap =
+                shopCartItems.stream().collect(Collectors.groupingBy(ShopCartItemDto::getShopId));
 
         // 返回一个店铺的所有信息
         List<ShopCartDto> shopCartDtos = Lists.newArrayList();
@@ -161,7 +168,8 @@ public class BasketServiceImpl extends ServiceImpl<BasketMapper, Basket> impleme
     }
 
     @Override
-    public List<ShopCartItemDto> getShopCartItemsByOrderItems(List<Long> basketId, OrderItemParam orderItem,String userId) {
+    public List<ShopCartItemDto> getShopCartItemsByOrderItems(List<Long> basketId, OrderItemParam orderItem,
+            String userId) {
         if (orderItem == null && CollectionUtil.isEmpty(basketId)) {
             return Collections.emptyList();
         }
@@ -185,9 +193,9 @@ public class BasketServiceImpl extends ServiceImpl<BasketMapper, Basket> impleme
             shopCartItemDto.setProdCount(orderItem.getProdCount());
             shopCartItemDto.setProdId(orderItem.getProdId());
             shopCartItemDto.setSkuName(sku.getSkuName());
-            shopCartItemDto.setPic(StrUtil.isBlank(sku.getPic())? prod.getPic() : sku.getPic());
+            shopCartItemDto.setPic(StrUtil.isBlank(sku.getPic()) ? prod.getPic() : sku.getPic());
             shopCartItemDto.setProdName(sku.getProdName());
-            shopCartItemDto.setProductTotalAmount(Arith.mul(sku.getPrice(),orderItem.getProdCount()));
+            shopCartItemDto.setProductTotalAmount(Arith.mul(sku.getPrice(), orderItem.getProdCount()));
             shopCartItemDto.setPrice(sku.getPrice());
             shopCartItemDto.setDistributionCardNo(orderItem.getDistributionCardNo());
             shopCartItemDto.setBasketDate(new Date());

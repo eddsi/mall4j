@@ -10,8 +10,7 @@
 
 package com.yami.shop.bean.app.dto;
 
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.yami.shop.common.serializer.json.ImgJsonSerializer;
+import java.util.List;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
@@ -24,20 +23,25 @@ public class ProductDto {
     /**
      * 店铺ID
      */
-    @Schema(description = "店铺ID", required = true)
-    private Long shopId;
+
+
+    //    @Schema(description = "店铺ID", required = true)
+    //    private Long shopId;
 
     /**
      * 店铺名称
      */
-    @Schema(description = "店铺名称", required = true)
-    private String shopName;
+    //    @Schema(description = "店铺名称", required = true)
+    //    private String shopName;
 
     /**
      * 商品ID
      */
-    @Schema(description = "商品ID", required = true)
+    @Schema(description = "文档ID", required = true)
     private Long prodId;
+
+    @Schema(description = "分类名称")
+    private String categoryName;
 
     /**
      * 商品名称
@@ -78,19 +82,25 @@ public class ProductDto {
     /**
      * 商品主图
      */
-    @JsonSerialize(using = ImgJsonSerializer.class)
-    @Schema(description = "商品主图", required = true)
-    private String pic;
-
-    @JsonSerialize(using = ImgJsonSerializer.class)
-    @Schema(description = "商品图片列表，以逗号分割", required = true)
-    private String imgs;
+    //    @JsonSerialize(using = ImgJsonSerializer.class)
+    //    @Schema(description = "商品主图", required = true)
+    //    private String pic;
+    //
+    //    @JsonSerialize(using = ImgJsonSerializer.class)
+    //    @Schema(description = "商品图片列表，以逗号分割", required = true)
+    //    private String imgs;
 
     /**
      * 商品分类
      */
     @Schema(description = "商品分类id", required = true)
     private Long categoryId;
+
+    private String keyWord;
+
+    @Schema(description = "文件列表")
+    private List<String> filePhotos;
+
 
     //    @Schema(description = "sku列表" )
     //    private List<SkuDto> skuList;

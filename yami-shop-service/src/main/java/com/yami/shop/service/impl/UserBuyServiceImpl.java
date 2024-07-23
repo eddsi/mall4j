@@ -3,9 +3,9 @@ package com.yami.shop.service.impl;
 import org.springframework.stereotype.Service;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.yami.shop.bean.model.UserDocument;
-import com.yami.shop.dao.UserDocumentMapper;
-import com.yami.shop.service.UserDocumentService;
+import com.yami.shop.bean.model.UserBuy;
+import com.yami.shop.dao.UserBuyMapper;
+import com.yami.shop.service.UserBuyService;
 
 /**
  * @Author：T3yes
@@ -17,5 +17,5 @@ import com.yami.shop.service.UserDocumentService;
  * @Description:
  */
 @Service
-public class UserDocumentServiceImpl extends ServiceImpl<UserDocumentMapper, UserDocument> implements UserDocumentService {
+public class UserBuyServiceImpl extends ServiceImpl<UserBuyMapper, UserBuy> implements UserBuyService {
 }

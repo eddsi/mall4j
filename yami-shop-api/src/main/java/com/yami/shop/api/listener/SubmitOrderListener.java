@@ -10,31 +10,46 @@
 
 package com.yami.shop.api.listener;
 
-import cn.hutool.core.lang.Snowflake;
-import cn.hutool.core.util.StrUtil;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.context.event.EventListener;
+import org.springframework.core.annotation.Order;
+import org.springframework.stereotype.Component;
+
 import com.yami.shop.bean.app.dto.ShopCartItemDiscountDto;
 import com.yami.shop.bean.app.dto.ShopCartItemDto;
 import com.yami.shop.bean.app.dto.ShopCartOrderDto;
 import com.yami.shop.bean.app.dto.ShopCartOrderMergerDto;
 import com.yami.shop.bean.enums.OrderStatus;
 import com.yami.shop.bean.event.SubmitOrderEvent;
-import com.yami.shop.bean.model.*;
+import com.yami.shop.bean.model.OrderItem;
+import com.yami.shop.bean.model.OrderSettlement;
+import com.yami.shop.bean.model.Product;
+import com.yami.shop.bean.model.Sku;
+import com.yami.shop.bean.model.UserAddrOrder;
 import com.yami.shop.bean.order.SubmitOrderOrder;
 import com.yami.shop.common.constants.Constant;
 import com.yami.shop.common.exception.YamiShopBindException;
 import com.yami.shop.common.util.Arith;
-import com.yami.shop.dao.*;
+import com.yami.shop.dao.BasketMapper;
+import com.yami.shop.dao.OrderItemMapper;
+import com.yami.shop.dao.OrderMapper;
+import com.yami.shop.dao.OrderSettlementMapper;
+import com.yami.shop.dao.ProductMapper;
+import com.yami.shop.dao.SkuMapper;
 import com.yami.shop.security.api.util.SecurityUtils;
 import com.yami.shop.service.ProductService;
 import com.yami.shop.service.SkuService;
 import com.yami.shop.service.UserAddrOrderService;
-import lombok.AllArgsConstructor;
-import cn.hutool.core.bean.BeanUtil;
-import org.springframework.context.event.EventListener;
-import org.springframework.core.annotation.Order;
-import org.springframework.stereotype.Component;
 
-import java.util.*;
+import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.lang.Snowflake;
+import cn.hutool.core.util.StrUtil;
+import lombok.AllArgsConstructor;
 
 /**
  * 确认订单信息时的默认操作
@@ -45,8 +60,6 @@ import java.util.*;
 @AllArgsConstructor
 public class SubmitOrderListener {
 
-
-    
 
     private final UserAddrOrderService userAddrOrderService;
 
@@ -134,7 +147,9 @@ public class SubmitOrderListener {
 
     }
 
-    private void createOrder(SubmitOrderEvent event, Date now, String userId, List<Long> basketIds, Map<Long, Sku> skuStocksMap, Map<Long, Product> prodStocksMap, Long addrOrderId, ShopCartOrderDto shopCartOrderDto) {
+    private void createOrder(SubmitOrderEvent event, Date now, String userId, List<Long> basketIds,
+            Map<Long, Sku> skuStocksMap, Map<Long, Product> prodStocksMap, Long addrOrderId,
+            ShopCartOrderDto shopCartOrderDto) {
         // 使用雪花算法生成的订单号
         String orderNumber = String.valueOf(snowflake.nextId());
         shopCartOrderDto.setOrderNumber(orderNumber);
@@ -153,7 +168,8 @@ public class SubmitOrderListener {
                 Sku sku = checkAndGetSku(shopCartItem.getSkuId(), shopCartItem, skuStocksMap);
                 Product product = checkAndGetProd(shopCartItem.getProdId(), shopCartItem, prodStocksMap);
 
-                OrderItem orderItem = getOrderItem(now, userId, orderNumber, shopId, orderProdName, shopCartItem, sku, product);
+                OrderItem orderItem =
+                        getOrderItem(now, userId, orderNumber, shopId, orderProdName, shopCartItem, sku, product);
 
                 orderItems.add(orderItem);
 
@@ -172,7 +188,8 @@ public class SubmitOrderListener {
 
 
         // 订单信息
-        com.yami.shop.bean.model.Order order = getOrder(now, userId, addrOrderId, shopCartOrderDto, orderNumber, shopId, orderProdName, orderItems);
+        com.yami.shop.bean.model.Order order =
+                getOrder(now, userId, addrOrderId, shopCartOrderDto, orderNumber, shopId, orderProdName, orderItems);
         event.getOrders().add(order);
         // 插入订单结算表
         OrderSettlement orderSettlement = new OrderSettlement();
@@ -186,7 +203,9 @@ public class SubmitOrderListener {
         orderSettlementMapper.insert(orderSettlement);
     }
 
-    private com.yami.shop.bean.model.Order getOrder(Date now, String userId, Long addrOrderId, ShopCartOrderDto shopCartOrderDto, String orderNumber, Long shopId, StringBuilder orderProdName, List<OrderItem> orderItems) {
+    private com.yami.shop.bean.model.Order getOrder(Date now, String userId, Long addrOrderId,
+            ShopCartOrderDto shopCartOrderDto, String orderNumber, Long shopId, StringBuilder orderProdName,
+            List<OrderItem> orderItems) {
         com.yami.shop.bean.model.Order order = new com.yami.shop.bean.model.Order();
 
         order.setShopId(shopId);
@@ -206,7 +225,8 @@ public class SubmitOrderListener {
         order.setDeleteStatus(0);
         order.setProductNums(shopCartOrderDto.getTotalCount());
         order.setAddrOrderId(addrOrderId);
-        order.setReduceAmount(Arith.sub(Arith.add(shopCartOrderDto.getTotal(), shopCartOrderDto.getTransfee()), shopCartOrderDto.getActualTotal()));
+        order.setReduceAmount(Arith.sub(Arith.add(shopCartOrderDto.getTotal(), shopCartOrderDto.getTransfee()),
+                shopCartOrderDto.getActualTotal()));
         order.setFreightAmount(shopCartOrderDto.getTransfee());
         order.setRemarks(shopCartOrderDto.getRemarks());
 
@@ -214,7 +234,8 @@ public class SubmitOrderListener {
         return order;
     }
 
-    private OrderItem getOrderItem(Date now, String userId, String orderNumber, Long shopId, StringBuilder orderProdName, ShopCartItemDto shopCartItem, Sku sku, Product product) {
+    private OrderItem getOrderItem(Date now, String userId, String orderNumber, Long shopId,
+            StringBuilder orderProdName, ShopCartItemDto shopCartItem, Sku sku, Product product) {
         OrderItem orderItem = new OrderItem();
         orderItem.setShopId(shopId);
         orderItem.setOrderNumber(orderNumber);

@@ -199,7 +199,7 @@ public class ProductController {
     }
 
     /**
-     * 更新商品状态
+     * 更新商品状态 todo
      */
     @PutMapping("/prodStatus")
     @PreAuthorize("@pms.hasPermission('prod:prod:status')")
