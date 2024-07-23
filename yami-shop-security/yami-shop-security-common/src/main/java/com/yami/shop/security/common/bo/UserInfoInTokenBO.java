@@ -9,9 +9,9 @@
  */
 package com.yami.shop.security.common.bo;
 
-import lombok.Data;
-
 import java.util.Set;
+
+import lombok.Data;
 
 /**
  * 保存在token信息里面的用户信息
@@ -39,6 +39,7 @@ public class UserInfoInTokenBO {
 
     /**
      * 系统类型
+     *
      * @see com.yami.shop.security.common.enums.SysTypeEnum
      */
     private Integer sysType;
@@ -65,4 +66,5 @@ public class UserInfoInTokenBO {
      */
     private Long otherId;
 
+    private String userName;
 }

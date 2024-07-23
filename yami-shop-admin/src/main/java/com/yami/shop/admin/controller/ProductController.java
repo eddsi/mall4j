@@ -10,8 +10,22 @@
 
 package com.yami.shop.admin.controller;
 
-import cn.hutool.core.collection.CollectionUtil;
-import cn.hutool.core.util.StrUtil;
+import java.util.Date;
+import java.util.List;
+import java.util.Objects;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.yami.shop.bean.model.Product;
@@ -26,15 +40,11 @@ import com.yami.shop.service.BasketService;
 import com.yami.shop.service.ProdTagReferenceService;
 import com.yami.shop.service.ProductService;
 import com.yami.shop.service.SkuService;
-import cn.hutool.core.bean.BeanUtil;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.*;
 
+import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.util.StrUtil;
 import jakarta.validation.Valid;
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
 
 
 /**
@@ -99,7 +109,7 @@ public class ProductController {
     @PostMapping
     @PreAuthorize("@pms.hasPermission('prod:prod:save')")
     public ServerResponseEntity<String> save(@Valid @RequestBody ProductParam productParam) {
-        checkParam(productParam);
+        //        checkParam(productParam);
 
         Product product = BeanUtil.copyProperties(productParam, Product.class);
         product.setDeliveryMode(Json.toJsonString(productParam.getDeliveryModeVo()));

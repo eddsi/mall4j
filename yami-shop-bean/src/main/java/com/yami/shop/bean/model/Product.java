@@ -10,14 +10,18 @@
 
 package com.yami.shop.bean.model;
 
-import com.baomidou.mybatisplus.annotation.*;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.yami.shop.common.serializer.json.ImgJsonSerializer;
-import lombok.Data;
-
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.Version;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.yami.shop.common.serializer.json.ImgJsonSerializer;
+
+import lombok.Data;
 
 /**
  * @author lanhai
@@ -83,6 +87,27 @@ public class Product implements Serializable {
      * 已经销售数量
      */
     private Integer soldNum;
+
+    /**
+     * 关键字
+     */
+    private String keyWord;
+
+
+    /**
+     * 原始key
+     */
+    private String originalKey;
+
+    /**
+     * 文档分割后的图片列表
+     */
+    private String filePhotos;
+
+    /**
+     * 作者
+     */
+    private String author;
 
     /**
      * 库存量

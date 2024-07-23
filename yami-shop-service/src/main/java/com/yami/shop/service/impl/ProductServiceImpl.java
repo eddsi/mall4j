@@ -10,7 +10,19 @@
 
 package com.yami.shop.service.impl;
 
-import cn.hutool.core.collection.CollectionUtil;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -22,24 +34,16 @@ import com.yami.shop.bean.model.ProdTagReference;
 import com.yami.shop.bean.model.Product;
 import com.yami.shop.bean.model.Sku;
 import com.yami.shop.common.util.Arith;
+import com.yami.shop.common.util.MinioUtils;
 import com.yami.shop.common.util.PageParam;
 import com.yami.shop.dao.ProdTagReferenceMapper;
 import com.yami.shop.dao.ProductMapper;
 import com.yami.shop.dao.SkuMapper;
 import com.yami.shop.service.AttachFileService;
 import com.yami.shop.service.ProductService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
-import org.springframework.cache.annotation.Caching;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
+import cn.hutool.core.collection.CollectionUtil;
+import io.netty.channel.DefaultEventLoopGroup;
 
 /**
  * @author lanhai
@@ -47,6 +51,7 @@ import java.util.stream.Collectors;
 @Service
 public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> implements ProductService {
 
+    private static final Logger log = LoggerFactory.getLogger(ProductServiceImpl.class);
     @Autowired
     private ProductMapper productMapper;
     @Autowired
@@ -55,17 +60,20 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
     private AttachFileService attachFileService;
     @Autowired
     private ProdTagReferenceMapper prodTagReferenceMapper;
-
-    private static final Logger log = LoggerFactory.getLogger(ProductServiceImpl.class);
+    @Autowired
+    private MinioUtils minioUtils;
+    private DefaultEventLoopGroup defaultEventExecutor = new DefaultEventLoopGroup(2);
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void saveProduct(Product product) {
+        //TODO 记得删除一下模板和收货信息
         productMapper.insert(product);
         if (CollectionUtil.isNotEmpty(product.getSkuList())) {
             skuMapper.insertBatch(product.getProdId(), product.getSkuList());
         }
         prodTagReferenceMapper.insertBatch(product.getShopId(), product.getProdId(), product.getTagList());
+        //异步处理
 
     }
 
@@ -107,7 +115,8 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
         //更新分组信息
         List<Long> tagList = product.getTagList();
         if (CollectionUtil.isNotEmpty(tagList)) {
-            prodTagReferenceMapper.delete(new LambdaQueryWrapper<ProdTagReference>().eq(ProdTagReference::getProdId, product.getProdId()));
+            prodTagReferenceMapper.delete(
+                    new LambdaQueryWrapper<ProdTagReference>().eq(ProdTagReference::getProdId, product.getProdId()));
             prodTagReferenceMapper.insertBatch(dbProduct.getShopId(), product.getProdId(), tagList);
         }
     }
@@ -137,12 +146,12 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
                 .eq(ProdTagReference::getProdId, prodId));
 
         // 删除数据库中的商品图片
-//        if (StrUtil.isNotBlank(dbProduct.getImgs())) {
-//            String[] imgs = dbProduct.getImgs().split(StrUtil.COMMA);
-//            for (String img : imgs) {
-//                attachFileService.deleteFile(img);
-//            }
-//        }
+        //        if (StrUtil.isNotBlank(dbProduct.getImgs())) {
+        //            String[] imgs = dbProduct.getImgs().split(StrUtil.COMMA);
+        //            for (String img : imgs) {
+        //                attachFileService.deleteFile(img);
+        //            }
+        //        }
     }
 
     @Override
@@ -176,14 +185,17 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
     }
 
     @Override
-    public IPage<SearchProdDto> getSearchProdDtoPageByProdName(Page page, String prodName, Integer sort, Integer orderBy) {
-        IPage<SearchProdDto> searchProdDtoPage = productMapper.getSearchProdDtoPageByProdName(page, prodName, sort, orderBy);
+    public IPage<SearchProdDto> getSearchProdDtoPageByProdName(Page page, String prodName, Integer sort,
+            Integer orderBy) {
+        IPage<SearchProdDto> searchProdDtoPage =
+                productMapper.getSearchProdDtoPageByProdName(page, prodName, sort, orderBy);
         for (SearchProdDto searchProdDto : searchProdDtoPage.getRecords()) {
             //计算出好评率
             if (searchProdDto.getPraiseNumber() == 0 || searchProdDto.getProdCommNumber() == 0) {
                 searchProdDto.setPositiveRating(0.0);
             } else {
-                searchProdDto.setPositiveRating(Arith.mul(Arith.div(searchProdDto.getPraiseNumber(), searchProdDto.getProdCommNumber()), 100));
+                searchProdDto.setPositiveRating(
+                        Arith.mul(Arith.div(searchProdDto.getPraiseNumber(), searchProdDto.getProdCommNumber()), 100));
             }
         }
         return searchProdDtoPage;
