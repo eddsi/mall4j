@@ -73,7 +73,7 @@ public class IndexImgController {
         Long shopId = SecurityUtils.getSysUser().getShopId();
         IndexImg indexImg = indexImgService.getOne(new LambdaQueryWrapper<IndexImg>().eq(IndexImg::getShopId, shopId).eq(IndexImg::getImgId, imgId));
         if (Objects.nonNull(indexImg.getRelation())) {
-            Product product = productService.getProductByProdId(indexImg.getRelation(), );
+            Product product = productService.getProductByProdId(indexImg.getRelation());
             indexImg.setPic(product.getPic());
             indexImg.setProdName(product.getProdName());
         }
