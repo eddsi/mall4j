@@ -13,6 +13,7 @@ import lombok.Data;
 
 /**
  * 用户详细信息
+ *
  * @author LGH
  */
 @Data
@@ -38,4 +39,7 @@ public class YamiUser {
     private Long shopId;
 
     private String nickName;
+
+    private String userName;
+
 }

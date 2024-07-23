@@ -9,10 +9,13 @@
  */
 package com.yami.shop.security.api.util;
 
+import java.util.Objects;
+
 import com.yami.shop.common.util.HttpContextUtils;
 import com.yami.shop.security.api.model.YamiUser;
 import com.yami.shop.security.common.bo.UserInfoInTokenBO;
 import com.yami.shop.security.common.util.AuthUserContext;
+
 import lombok.experimental.UtilityClass;
 
 /**
@@ -32,7 +35,9 @@ public class SecurityUtils {
             throw new RuntimeException("yami.user.request.error");
         }
         UserInfoInTokenBO userInfoInTokenBO = AuthUserContext.get();
-
+        if (Objects.isNull(userInfoInTokenBO)) {
+            throw new RuntimeException("请先登录！");
+        }
         YamiUser yamiUser = new YamiUser();
         yamiUser.setUserId(userInfoInTokenBO.getUserId());
         yamiUser.setBizUserId(userInfoInTokenBO.getBizUserId());

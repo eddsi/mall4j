@@ -5896,3 +5896,13 @@ CREATE TABLE `tz_user_collection` (
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
 /*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+---修改表记录
+alter table tz_prod
+    add key_word varchar(100) null after imgs;
+
+alter table tz_prod
+    add original_key varchar(1000) null comment 'minio原始key' after key_word;
+
+alter table tz_prod
+    add file_photos json null comment '文件列表，保存为JSON' after original_key;
