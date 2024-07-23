@@ -182,13 +182,14 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
     //    @Cacheable(cacheNames = "product", key = "#prodId")
     public Product getProductByProdIdAndUserName(Long prodId, String userName) {
         //查看是否已经购买,只有购买者和作者能够查看详情
+        Product product = productMapper.selectById(prodId);
         UserBuy one = userBuyService.lambdaQuery().
                 eq(UserBuy::getUserName, userName).eq(UserBuy::getProdId, prodId)
                 .one();
-        if (Objects.isNull(one)) {
+        if (Objects.isNull(one) && !Objects.equals(product.getAuthor(), userName)) {
             throw new YamiShopBindException(ResponseEnum.NO_BUY);
         }
-        return productMapper.selectById(prodId);
+        return product;
     }
 
     @Override

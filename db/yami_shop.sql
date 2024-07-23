@@ -5900,3 +5900,14 @@ alter table tz_prod
 
 alter table tz_prod
     add file_photos json null comment '文件列表，保存为JSON' after original_key;
+alter table tz_prod
+    add author varchar(1000) null comment '拥有者' after original_key;
+create table yami_shops.user_buy
+(
+    id          bigint auto_increment
+        primary key,
+    user_id     bigint        null comment '用户id',
+    prod_id     bigint        null comment '文档id',
+    create_time datetime      null comment '创建时间',
+    user_name   varchar(1000) null comment '用户名'
+);
