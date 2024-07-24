@@ -30,7 +30,7 @@ public class ProdSaveVO {
     /**
      * 商品价格
      */
-    @NotNull(message = "请输入商品价格")
+    @Schema(description = "请输入商品现价")
     private Double price;
 
     /**
@@ -38,12 +38,6 @@ public class ProdSaveVO {
      */
     @NotNull(message = "请输入商品原价")
     private Double oriPrice;
-
-    //    /**
-    //     * 库存量
-    //     */
-    //    @NotNull(message = "请输入商品库存")
-    //    private Integer totalStocks;
 
     /**
      * 简要描述,卖点等

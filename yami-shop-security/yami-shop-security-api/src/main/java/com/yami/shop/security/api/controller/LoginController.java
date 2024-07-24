@@ -49,13 +49,11 @@ public class LoginController {
         String mobileOrUserName = authenticationDTO.getUserName();
         User user = getUser(mobileOrUserName);
 
-        //        String decryptPassword = passwordManager.decryptPassword(authenticationDTO.getPassWord());
+        String decryptPassword = passwordManager.decryptPassword(authenticationDTO.getPassWord());
 
         // 半小时内密码输入错误十次，已限制登录30分钟
-        String passWord = authenticationDTO.getPassWord();
-        passwordCheckManager.checkPassword(SysTypeEnum.ORDINARY, authenticationDTO.getUserName(), passWord,
+        passwordCheckManager.checkPassword(SysTypeEnum.ORDINARY, authenticationDTO.getUserName(), decryptPassword,
                 user.getLoginPassword());
-
         UserInfoInTokenBO userInfoInToken = new UserInfoInTokenBO();
         userInfoInToken.setUserId(user.getUserId());
         userInfoInToken.setUserName(user.getNickName());
