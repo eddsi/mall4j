@@ -138,8 +138,8 @@ Page({
                             let requestData = {
                                 name: md5Hash,
                                 key: data.data,
-                                price: price,
-                                description: description,
+                                oriPrice: price,
+                                brief: description,
                                 keyword: keyword
                             };
                             wx.request({
