@@ -106,7 +106,10 @@ sudo apt install openjdk-17-jdk
 ```
 mvn clean install
 ```
-#### 6. 启动Docker Compose
+#### 6. 设置环境变量
+将.env.example复制一份，重命名为.env，设置好每一个环境变量，如果缺少相应的环境变量，代码将无法运行
+
+#### 7. 启动Docker Compose
    使用Docker Compose启动所有相关的服务
 ```angular2html
 docker-compose up -d
