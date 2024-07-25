@@ -1,5 +1,7 @@
 var config = require('../../utils/config.js');
-import { encrypt } from '../../utils/crypto.js';
+import {
+    encrypt
+} from '../../utils/crypto.js';
 
 Page({
     data: {
@@ -11,15 +13,50 @@ Page({
         priceError: false,
         priceErrorMessage: '请输入有效的价格',
         minPrice: 1, // 最小价格
-        maxPrice: 1000 // 最大价格
+        maxPrice: 1000, // 最大价格
+        parentCategories: [],
+        childCategories: [],
+        selectedParentCategory: null,
+        selectedChildCategory: null
     },
-    pickerChange(e) {
-        const index = e.detail.value; // 获取选中的索引
-        const selectedKeyword = ['互联网/AI', '电子', '通讯'][index]; // 根据索引获取选中的关键字
-        this.setData({
-            keyword: selectedKeyword // 更新关键字的值
+
+    onLoad() {
+        this.fetchCategories();
+    },
+
+    fetchCategories() {
+        wx.request({
+            url: config.domain + "/category/categoryInfo", // 替换为你的后端接口地址
+            method: 'GET',
+            success: res => {
+                if (res.data.success) {
+                    const categories = res.data.data;
+                    const parentCategories = categories.filter(category => category.parentId === 0);
+                    this.setData({
+                        parentCategories: parentCategories
+                    });
+                }
+            }
         });
     },
+
+    pickerParentChange(e) {
+        const selectedParent = this.data.parentCategories[e.detail.value];
+        const childCategories = this.data.parentCategories.filter(category => category.parentId === selectedParent.categoryId);
+        this.setData({
+            selectedParentCategory: selectedParent,
+            childCategories: childCategories,
+            selectedChildCategory: null
+        });
+    },
+
+    pickerChildChange(e) {
+        const selectedChild = this.data.childCategories[e.detail.value];
+        this.setData({
+            selectedChildCategory: selectedChild
+        });
+    },
+
     // 处理复选框变更
     checkboxChange: function (e) {
         this.setData({
@@ -39,12 +76,12 @@ Page({
         let price = e.detail.value;
         if (!isNaN(price) && price >= this.data.minPrice && price <= this.data.maxPrice) {
             this.setData({
-            price: price,
-            priceError: false
+                price: price,
+                priceError: false
             });
         } else {
             this.setData({
-            priceError: true
+                priceError: true
             });
         }
     },

@@ -1,20 +1,25 @@
 <view class="page">
   <view class="file-container">
     <view wx:if="{{file}}" class="file-icon-and-name">
-    <view wx:if="{{priceError}}" class="error-message">{{priceErrorMessage}}</view>
+      <view wx:if="{{priceError}}" class="error-message">{{priceErrorMessage}}</view>
       <image class="file-icon" src="../../images/icon/toTake.png"></image>
       <text>{{file.name}}</text>
       <view class="picker-container">
-          <view>
-            <input class="input" placeholder="文档定价" bindinput="handlePriceInput" data-field="price"/>
-            <input class="input" placeholder="请输入文档简介" bindinput="bindInput" data-field="description"/>
-          </view>
-          <picker mode="selector" range="{{ ['互联网/AI', '电子', '通讯'] }}" bindchange="pickerChange">
-            <view class="picker">
-              <input class="input" placeholder="请选择行业关键字" disabled value="{{ keyword }}" />
-            </view>
-          </picker>
+        <view>
+          <input class="input" placeholder="文档定价" bindinput="handlePriceInput" data-field="price" />
+          <input class="input" placeholder="请输入文档简介" bindinput="bindInput" data-field="description" />
         </view>
+        <picker mode="selector" range="{{parentCategories}}" range-key="categoryName" bindchange="pickerParentChange">
+          <view class="picker">
+            <input class="input" placeholder="请选择父级分类" disabled value="{{selectedParentCategory ? selectedParentCategory.categoryName : ''}}" />
+          </view>
+        </picker>
+        <picker wx:if="{{selectedParentCategory}}" mode="selector" range="{{childCategories}}" range-key="categoryName" bindchange="pickerChildChange">
+          <view class="picker">
+            <input class="input" placeholder="请选择子级分类" disabled value="{{selectedChildCategory ? selectedChildCategory.categoryName : ''}}" />
+          </view>
+        </picker>
+      </view>
     </view>
     <view wx:else>
       <view class="file-type">
