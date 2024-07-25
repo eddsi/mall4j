@@ -80,18 +80,47 @@ https://gitee.com/gz-yami/mall4j/wikis
 
 ## 真正的部署教程！！
 
-java后台：也就是当前项目。下面三个项目不用从仓库拉取，front-end文件夹中已经存放了它们的代码。请直接查看特定文件夹下的README
+### 部署后端（java后台）
+#### 1. 安装Maven
+   首先，在Linux服务器上安装Maven。如果你已经安装了Maven，可以跳过此步骤
+```
+sudo apt update
+sudo apt install maven
+```
+#### 2. 拉取仓库代码
+   使用Git从你的代码仓库中拉取最新的代码
+```
+git clone https://gitee.com/eddsi/mall4j.git
+cd mall4j
+```
+#### 3. 安装Docker和Docker Compose
+   如果你没有安装Docker和Docker Compose，请按照以下步骤进行安装
+#### 4. 安装OpenJDK 17
+   在使用Maven打包之前，需要安装OpenJDK 17
+```angular2html
+sudo apt update
+sudo apt install openjdk-17-jdk
+```
+#### 5. 利用Maven打包
+   使用Maven将项目打包成一个可执行的JAR文件
+```
+mvn clean install
+```
+#### 6. 启动Docker Compose
+   使用Docker Compose启动所有相关的服务
+```angular2html
+docker-compose up -d
+```
+### 后台管理界面的前端
+请查看./front-end/mall4v/README.md
 
-后台管理界面的前端（vue）：https://gitee.com/gz-yami/mall4v
+### 小程序
+请查看./front-end/mall4m/README.md
 
-小程序：https://gitee.com/gz-yami/mall4m
-
-uni-app：https://gitee.com/gz-yami/mall4uni
+### uni-app
+请查看./front-end/mall4uni/README.md
 
 ## 相关截图
-
-
-
 
 ### 1. 后台截图
 ![商城后台](https://gitee.com/gz-yami/mall4j/raw/master/screenshot/mall4jV.gif)
