@@ -66,6 +66,12 @@ Page({
     })
   },
 
+  toMessageBoard: function () {
+    wx.navigateTo({
+      url: '/pages/message-board/message-board'
+    });
+  },
+
   //跳转商品活动页面
   toClassifyPage: function(e) {
     var url = '/pages/prod-classify/prod-classify?sts=' + e.currentTarget.dataset.sts;

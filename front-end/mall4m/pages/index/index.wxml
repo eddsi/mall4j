@@ -154,5 +154,9 @@
       </view>
     </view>
   </block>
+  <view class='message-board' >
+    <view class='title' bindtap='toMessageBoard'>分享交流中心</view>
+  </view>
+
 </view>
 <wxs module="wxs" src="../../wxs/number.wxs" />
