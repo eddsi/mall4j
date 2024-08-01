@@ -1,97 +1,69 @@
-// pages/messageBoard/messageBoard.js
-const app = getApp();
-
+// pages/messageBoardList/messageBoardList.js
+var config = require("../../utils/config.js");
 Page({
   data: {
-    messages: [],
-    newMessage: '',
-    baseUrl: app.globalData.apiBaseUrl,
-    page: 1,
-    pageSize: 10,
+    messages: []
   },
 
-  onLoad: function () {
-    this.loadMessages();
+  onLoad() {
+    this.getMessages();
   },
 
-  loadMessages: function () {
-    const {
-      baseUrl,
-      page,
-      pageSize
-    } = this.data;
+  getMessages() {
     wx.request({
-      url: `${baseUrl}`,
+      url: config.domain + '/p/message-board', // 替换为实际的接口地址
       method: 'GET',
-      data: {
-        page: page,
-        pageSize: pageSize
-      },
-      success: res => {
-        if (res.data.success) {
-          this.setData({
-            messages: res.data.data.records
-          });
-        }
-      },
-      fail: err => {
-        console.error(err);
+      success: (res) => {
+        this.setData({
+          messages: res.data.messages
+        });
       }
     });
   },
 
-  loadChildMessages: function (messageId) {
-    const {
-      baseUrl
-    } = this.data;
-    wx.request({
-      url: `${baseUrl}/message/child`,
-      method: 'GET',
-      data: {
-        messageId: messageId
-      },
-      success: res => {
-        if (res.data.success) {
-          // 处理子留言逻辑
-        }
-      },
-      fail: err => {
-        console.error(err);
-      }
-    });
-  },
 
-  handleInputChange: function (e) {
+  handleTitleInputChange(e) {
     this.setData({
-      newMessage: e.detail.value
+      newTitle: e.detail.value
     });
   },
 
-  submitMessage: function () {
+  handleContentInputChange(e) {
+    this.setData({
+      newContent: e.detail.value
+    });
+  },
+
+  submitMessage() {
     const {
-      baseUrl,
-      newMessage
+      newTitle,
+      newContent
     } = this.data;
-    const userId = 'your-bizUserId'; // 获取用户ID的逻辑
+    if (!newTitle || !newContent) return;
 
     wx.request({
-      url: `${baseUrl}`,
+      url: 'your-api-endpoint-to-create-message', // 替换为实际的接口地址
       method: 'POST',
       data: {
-        content: newMessage,
-        bizUserId: userId
+        title: newTitle,
+        content: newContent
       },
-      success: res => {
-        if (res.data.success) {
-          this.setData({
-            newMessage: ''
-          });
-          this.loadMessages();
-        }
-      },
-      fail: err => {
-        console.error(err);
+      success: () => {
+        this.setData({
+          newTitle: '',
+          newContent: ''
+        });
+        this.getMessages();
       }
+    });
+  },
+
+  toMessageDetail(e) {
+    const {
+      id
+    } = e.currentTarget.dataset;
+    wx.navigateTo({
+      url: `/pages/message-detail/message-detail?id=${id}`
     });
   }
 });

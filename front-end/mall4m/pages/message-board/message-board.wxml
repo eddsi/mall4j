@@ -1,17 +1,18 @@
-<!-- pages/messageBoard/messageBoard.wxml -->
+<!-- pages/messageBoardList/messageBoardList.wxml -->
 <view class="container">
-  <view class="input-container">
-    <textarea placeholder="请输入留言" bindinput="handleInputChange" value="{{newMessage}}"></textarea>
-    <button bindtap="submitMessage">提交</button>
-  </view>
-  <view class="messages-container">
-    <block wx:for="{{messages}}" wx:key="id">
-      <view class="message">
-        <text>{{item.content}}</text>
-        <view class="child-messages">
-          <!-- 子留言处理 -->
-        </view>
+  <block wx:for="{{messages}}" wx:key="id">
+    <view class="message-item" bindtap="toMessageDetail" data-id="{{item.id}}">
+      <view class="message-title">{{item.title}}</view>
+      <view class="message-content">{{item.content}}</view>
+      <view class="message-footer">
+        <text>{{item.user}}</text>
+        <text>{{item.time}}</text>
       </view>
-    </block>
+    </view>
+  </block>
+  <view class="input-container">
+    <input placeholder="请输入标题" bindinput="handleTitleInputChange" value="{{newTitle}}" />
+    <textarea placeholder="请输入内容" bindinput="handleContentInputChange" value="{{newContent}}"></textarea>
+    <button bindtap="submitMessage">提交</button>
   </view>
 </view>
