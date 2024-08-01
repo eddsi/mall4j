@@ -1,0 +1,26 @@
+<!-- pages/messageDetail/messageDetail.wxml -->
+<view class="container">
+  <view class="message-detail">
+    <text class="message-title">{{message.title}}</text>
+    <text class="message-content">{{message.content}}</text>
+    <view class="message-footer">
+      <text>{{message.user}}</text>
+      <text>{{message.time}}</text>
+    </view>
+  </view>
+  <view class="child-messages">
+    <block wx:for="{{childMessages}}" wx:key="id">
+      <view class="child-message">
+        <text>{{item.content}}</text>
+        <view class="child-message-footer">
+          <text>{{item.user}}</text>
+          <text>{{item.time}}</text>
+        </view>
+      </view>
+    </block>
+  </view>
+  <view class="reply-input">
+    <textarea placeholder="请输入回复" bindinput="handleReplyInputChange" value="{{replyContent}}"></textarea>
+    <button bindtap="submitReply">提交</button>
+  </view>
+</view>
