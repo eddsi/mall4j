@@ -42,7 +42,7 @@ Page({
     if (!newTitle || !newContent) return;
 
     wx.request({
-      url: 'your-api-endpoint-to-create-message', // 替换为实际的接口地址
+      url: config.domain + '/p/message-board', // 替换为实际的接口地址
       method: 'POST',
       data: {
         title: newTitle,
