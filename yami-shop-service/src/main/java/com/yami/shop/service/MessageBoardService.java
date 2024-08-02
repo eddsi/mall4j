@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.yami.shop.bean.dto.message.CreateMessageBoardDTO;
 import com.yami.shop.bean.dto.message.MessageBoardDTO;
 import com.yami.shop.bean.model.MessageBoard;
+import com.yami.shop.bean.vo.message.MessageDetailVO;
 import com.yami.shop.common.bean.BasePage;
 
 /**
@@ -17,8 +18,9 @@ import com.yami.shop.common.bean.BasePage;
  * @Description:
  */
 public interface MessageBoardService extends IService<MessageBoard> {
-    void createMessageBoard(CreateMessageBoardDTO createMessageBoardDTO,String bizUserId);
+    void createMessageBoard(CreateMessageBoardDTO createMessageBoardDTO, String bizUserId);
 
     IPage<MessageBoardDTO> getMessageBoard(BasePage basePage);
 
-    IPage<MessageBoardDTO> getMessageBoardChild(BasePage basePage,Long messageId);  }
+    MessageDetailVO getMessageBoardChild(BasePage basePage, Long messageId);
+}
