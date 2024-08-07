@@ -128,11 +128,22 @@ sudo apt install docker-compose
 docker-compose --version
 docker --version
 ```
-如果docker拉取容器镜像太慢，可以考虑更换源，将/etc/docker/daemon.json文件内容改为如下
+如果docker拉取容器镜像太慢就配置代理
 ```
-{
-  "registry-mirrors": ["https://e1azq17l.mirror.aliyuncs.com", "https://docker.mirrors.ustc.edu.cn", "http://hub-mirror.c.163.com", "https://registry.docker-cn.com"]
-}
+sudo mkdir -p /etc/systemd/system/docker.service.d
+sudo vim /etc/systemd/system/docker.service.d/http-proxy.conf
+```
+添加以下内容
+```
+[Service]
+Environment="HTTP_PROXY=http://your-proxy-server:proxy-port/"
+Environment="HTTPS_PROXY=http://your-proxy-server:proxy-port/"
+Environment="NO_PROXY=localhost,127.0.0.1"
+```
+然后重启
+```
+sudo systemctl daemon-reload
+sudo systemctl restart docker
 ```
 #### 4. 安装OpenJDK 17
    在使用Maven打包之前，需要安装OpenJDK 17
