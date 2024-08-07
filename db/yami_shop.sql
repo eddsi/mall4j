@@ -5911,3 +5911,14 @@ create table yami_shops.user_buy
     create_time datetime      null comment '创建时间',
     user_name   varchar(1000) null comment '用户名'
 );
+-- 留言板
+create table yami_shops.message_board
+(
+    id          bigint auto_increment
+        primary key,
+    content     varchar(3000) null comment '内容',
+    creator     varchar(100)  null comment '创建者用户名',
+    message_id  bigint        null comment '回复的留言ID，如果是第一条，则没有',
+    create_time datetime      null comment '创建时间'
+)
+    comment '留言表';
