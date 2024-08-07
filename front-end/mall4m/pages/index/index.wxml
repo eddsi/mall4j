@@ -43,7 +43,7 @@
         <text>通讯</text>
       </view>
       <view class='item' bindtap='toCouponCenter'>
-        <image src='../../images/icon/newprods.png'></image>
+        <image src='../../images/icon/OIP-C.png'></image>
         <text>半导体</text>
       </view>
     </view>
