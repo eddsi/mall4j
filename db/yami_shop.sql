@@ -5891,7 +5891,6 @@ CREATE TABLE `tz_user_collection` (
 /*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
----修改表记录
 alter table tz_prod
     add key_word varchar(100) null after imgs;
 
@@ -5911,7 +5910,7 @@ create table `user_buy`
     `create_time` datetime      null comment '创建时间',
     `user_name`   varchar(1000) null comment '用户名'
 );
--- 留言板
+
 create table `message_board`
 (
     `id`          bigint auto_increment
