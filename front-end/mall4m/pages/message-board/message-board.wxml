@@ -1,13 +1,23 @@
-<!-- pages/messageBoardList/messageBoardList.wxml -->
 <view class="container">
   <block wx:for="{{messages}}" wx:key="id">
-    <view class="message-item" bindtap="toMessageDetail" data-id="{{item.id}}">
+    <view class="message-item" bindtap="toMessageDetail" data-id="{{item.messageId}}">
       <view class="message-title">{{item.title}}</view>
       <view class="message-content">{{item.content}}</view>
       <view class="message-footer">
-        <text>{{item.user}}</text>
-        <text>{{item.time}}</text>
+        <text>{{item.creator}}</text>
+        <text>{{item.createTime}}</text>
       </view>
+      <block wx:if="{{item.children.length > 0}}">
+        <block wx:for="{{item.children}}" wx:key="id">
+          <view class="message-reply">
+            <view class="message-content">{{item.content}}</view>
+            <view class="message-footer">
+              <text>{{item.creator}}</text>
+              <text>{{item.createTime}}</text>
+            </view>
+          </view>
+        </block>
+      </block>
     </view>
   </block>
   <view class="input-container">
