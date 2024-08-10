@@ -12,6 +12,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yami.shop.bean.dto.message.CreateMessageBoardDTO;
 import com.yami.shop.bean.dto.message.MessageBoardDTO;
 import com.yami.shop.bean.model.MessageBoard;
+import com.yami.shop.bean.vo.message.MessageDetailVO;
 import com.yami.shop.common.bean.BasePage;
 import com.yami.shop.dao.MessageBoardMapper;
 import com.yami.shop.service.MessageBoardService;
@@ -42,14 +43,16 @@ public class MessageBoardServiceImpl extends ServiceImpl<MessageBoardMapper, Mes
 
     @Override
     public IPage<MessageBoardDTO> getMessageBoard(BasePage basePage) {
-        Page<MessageBoard> page = lambdaQuery().orderByDesc(MessageBoard::getCreateTime)
+        Page<MessageBoard> page = lambdaQuery()
+                .isNull(MessageBoard::getMessageId)
+                .orderByDesc(MessageBoard::getCreateTime)
                 .page(new Page<>(basePage.getCurrent(), basePage.getSize()));
         if (page.getRecords().size() == 0) {
             return new Page<>();
         }
         return page.convert(v -> {
             MessageBoardDTO messageBoardDTO = BeanUtil.copyProperties(v, MessageBoardDTO.class);
-            List<MessageBoard> list = lambdaQuery().eq(MessageBoard::getMessageId, v.getMessageId())
+            List<MessageBoard> list = lambdaQuery().eq(MessageBoard::getMessageId, v.getId())
                     .orderByDesc(MessageBoard::getCreateTime).last("limit 2").list();
             if (list.size() > 0) {
                 List<MessageBoardDTO> children = new ArrayList<>();
@@ -67,12 +70,17 @@ public class MessageBoardServiceImpl extends ServiceImpl<MessageBoardMapper, Mes
     }
 
     @Override
-    public IPage<MessageBoardDTO> getMessageBoardChild(BasePage basePage, Long messageId) {
+    public MessageDetailVO getMessageBoardChild(BasePage basePage, Long messageId) {
+        MessageBoard messageBoard = getById(messageId);
+        MessageDetailVO messageDetailVO = BeanUtil.copyProperties(messageBoard, MessageDetailVO.class);
         Page<MessageBoard> page = lambdaQuery().eq(MessageBoard::getMessageId, messageId)
                 .orderByDesc(MessageBoard::getCreateTime).page(new Page<>(basePage.getCurrent(), basePage.getSize()));
-        return  page.convert(v -> {
+        messageDetailVO.setChildren(page.convert(v -> {
             MessageBoardDTO messageBoardDTO = BeanUtil.copyProperties(v, MessageBoardDTO.class);
             return messageBoardDTO;
-        });}
+        }));
+
+        return messageDetailVO;
+    }
 
 }

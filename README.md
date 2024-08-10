@@ -87,6 +87,27 @@ https://gitee.com/gz-yami/mall4j/wikis
 sudo apt update
 sudo apt install maven
 ```
+如果服务器从repo.maven拉取代码太慢，可以考虑设置源，在~/.m2下新建文件settings.xml，内容如下。
+```
+<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 http://maven.apache.org/xsd/settings-1.0.0.xsd">
+<mirrors>
+  <mirror>
+    <id>alimaven</id>
+    <name>aliyun maven</name>
+    <url>http://maven.aliyun.com/nexus/content/groups/public/</url>
+    <mirrorOf>central</mirrorOf>
+  </mirror>
+  <mirror>
+    <id>maven.net.cn</id>
+    <name>Mirror from Maven in china</name>
+    <url>http://maven.net.cn/content/groups/public/</url>
+    <mirrorOf>central</mirrorOf>
+  </mirror>
+</mirrors>
+</settings>
+```
 #### 2. 拉取仓库代码
    使用Git从你的代码仓库中拉取最新的代码
 ```
@@ -95,6 +116,35 @@ cd mall4j
 ```
 #### 3. 安装Docker和Docker Compose
    如果你没有安装Docker和Docker Compose，请按照以下步骤进行安装
+```
+sudo apt update
+sudo apt upgrade
+sudo apt install apt-transport-https ca-certificates curl software-properties-common
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+sudo apt update
+sudo apt install docker-ce
+sudo apt install docker-compose
+docker-compose --version
+docker --version
+```
+如果docker拉取容器镜像太慢就配置代理
+```
+sudo mkdir -p /etc/systemd/system/docker.service.d
+sudo vim /etc/systemd/system/docker.service.d/http-proxy.conf
+```
+添加以下内容
+```
+[Service]
+Environment="HTTP_PROXY=http://your-proxy-server:proxy-port/"
+Environment="HTTPS_PROXY=http://your-proxy-server:proxy-port/"
+Environment="NO_PROXY=localhost,127.0.0.1"
+```
+然后重启
+```
+sudo systemctl daemon-reload
+sudo systemctl restart docker
+```
 #### 4. 安装OpenJDK 17
    在使用Maven打包之前，需要安装OpenJDK 17
 ```angular2html

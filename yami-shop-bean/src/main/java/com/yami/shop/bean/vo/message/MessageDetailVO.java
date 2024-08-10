@@ -1,22 +1,23 @@
-package com.yami.shop.bean.dto.message;
+package com.yami.shop.bean.vo.message;
 
-import java.util.List;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.yami.shop.bean.dto.message.MessageBoardDTO;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 /**
- * @Author：T3yes
- * @Package：com.yami.shop.bean.dto.message
+ * @Author：T3yrs
+ * @Package：com.yami.shop.bean.vo.message
  * @Project：mall4j
- * @name：MessageBoardDTO
- * @Date：2024/6/23 04:42
- * @Filename：MessageBoardDTO
+ * @name：MessageDetailVO
+ * @Date：2024/8/3 03:49
+ * @Filename：MessageDetailVO
  * @Description:
  */
 @Data
-@Schema(name = "MessageBoardDTO", description = "查看留言板DTO")
-public class MessageBoardDTO {
+@Schema(name = "MessageDetailVO", description = "查看留言板详情VO")
+public class MessageDetailVO {
 
     @Schema(description = "本身的ID")
     private Long id;
@@ -34,5 +35,5 @@ public class MessageBoardDTO {
     private String createTime;
 
     @Schema(description = "回复/默认展示两条")
-    private List<MessageBoardDTO> children;
+    private IPage<MessageBoardDTO> children;
 }

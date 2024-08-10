@@ -1,8 +1,6 @@
 //index.js
 //获取应用实例
 var http = require("../../utils/http.js");
-var config = require("../../utils/config.js");
-const app = getApp()
 
 Page({
   data: {
@@ -19,23 +17,23 @@ Page({
     sts: 0,
   },
   //事件处理函数
-  bindViewTap: function() {
+  bindViewTap: function () {
     wx.navigateTo({
       url: '../logs/logs'
     })
   },
-  onLoad: function() {
+  onLoad: function () {
     this.getAllData();
   },
 
   // 页面滚动到指定位置指定元素固定在顶部
-  onPageScroll: function(e) { //监听页面滚动
+  onPageScroll: function (e) { //监听页面滚动
     this.setData({
       scrollTop: e.scrollTop
     })
   },
 
-  toProdPage: function(e) {
+  toProdPage: function (e) {
     var prodid = e.currentTarget.dataset.prodid;
     if (prodid) {
       wx.navigateTo({
@@ -44,23 +42,23 @@ Page({
     }
   },
 
-  toCouponCenter: function() {
+  toCouponCenter: function () {
     wx.showToast({
-      icon:"none",
+      icon: "none",
       title: '该功能未开源'
     })
   },
 
   // 跳转搜索页
-  toSearchPage: function() {
+  toSearchPage: function () {
     wx.navigateTo({
       url: '/pages/search-page/search-page',
     })
   },
 
   //文档上传页面
-  toDocumentUpload: function(e) {
-    var url ='/pages/document-page/document-page'
+  toDocumentUpload: function (e) {
+    var url = '/pages/document-page/document-page'
     wx.navigateTo({
       url: url,
     })
@@ -73,7 +71,7 @@ Page({
   },
 
   //跳转商品活动页面
-  toClassifyPage: function(e) {
+  toClassifyPage: function (e) {
     var url = '/pages/prod-classify/prod-classify?sts=' + e.currentTarget.dataset.sts;
     var id = e.currentTarget.dataset.id;
     var title = e.currentTarget.dataset.title;
@@ -86,22 +84,21 @@ Page({
   },
 
   //跳转限时特惠页面
-  toLimitedTimeOffer: function(e) {
+  toLimitedTimeOffer: function (e) {
     wx.showToast({
-      icon:"none",
+      icon: "none",
       title: '该功能未开源'
     })
   },
 
   //跳转公告列表页面
-  onNewsPage: function() {
+  onNewsPage: function () {
     wx.navigateTo({
       url: '/pages/recent-news/recent-news',
     })
   },
 
-  onShow: function() {
-  },
+  onShow: function () {},
   getAllData() {
     http.getCartCount(); //重新计算购物车总数量
     this.getIndexImgs();
@@ -142,7 +139,7 @@ Page({
   /**
    * 加入购物车
    */
-   addToCart(e) {
+  addToCart(e) {
     const prodId = e.currentTarget.dataset.prodid
     const ths = this
     wx.showLoading();
@@ -163,7 +160,7 @@ Page({
             shopId: res.shopId,
             skuId: res.skuList[0].skuId
           },
-          callBack: function(res) {
+          callBack: function (res) {
             ths.setData({
               totalCartNum: ths.data.totalCartNum + ths.data.prodNum
             });
@@ -236,13 +233,13 @@ Page({
   //     })
   // },
 
-  onPullDownRefresh: function() {
+  onPullDownRefresh: function () {
 
     // wx.showNavigationBarLoading() //在标题栏中显示加载
 
     //模拟加载
     var ths = this;
-    setTimeout(function() {
+    setTimeout(function () {
 
       ths.getAllData();
 
@@ -257,7 +254,7 @@ Page({
   /**
    * 跳转至商品详情
    */
-  showProdInfo: function(e) {
+  showProdInfo: function (e) {
     let relation = e.currentTarget.dataset.relation;
     if (relation) {
       wx.navigateTo({

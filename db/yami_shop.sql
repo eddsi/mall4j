@@ -5891,7 +5891,6 @@ CREATE TABLE `tz_user_collection` (
 /*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
----修改表记录
 alter table tz_prod
     add key_word varchar(100) null after imgs;
 
@@ -5902,12 +5901,23 @@ alter table tz_prod
     add file_photos json null comment '文件列表，保存为JSON' after original_key;
 alter table tz_prod
     add author varchar(1000) null comment '拥有者' after original_key;
-create table yami_shops.user_buy
+create table `user_buy`
 (
-    id          bigint auto_increment
+    `id`        bigint auto_increment
         primary key,
-    user_id     bigint        null comment '用户id',
-    prod_id     bigint        null comment '文档id',
-    create_time datetime      null comment '创建时间',
-    user_name   varchar(1000) null comment '用户名'
+    `user_id`     bigint        null comment '用户id',
+    `prod_id`     bigint        null comment '文档id',
+    `create_time` datetime      null comment '创建时间',
+    `user_name`   varchar(1000) null comment '用户名'
 );
+
+create table `message_board`
+(
+    `id`          bigint auto_increment
+        primary key,
+    `content`     varchar(3000) null comment '内容',
+    `creator`     varchar(100)  null comment '创建者用户名',
+    `message_id`  bigint        null comment '回复的留言ID，如果是第一条，则没有',
+    `create_time` datetime      null comment '创建时间'
+)
+    comment '留言表';
