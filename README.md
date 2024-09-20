@@ -164,6 +164,26 @@ mvn clean install
 ```angular2html
 docker-compose up -d
 ```
+
+#### ❓ 常见问题 Q&A
+使用Docker Compose部署时，就算配置了代理，也可能遇到无法拉取镜像的问题，
+此时，有3种解决方案
+
+1、增加站点，但这种方式受站点稳定性影响，不推荐
+
+2、如果拉取mysql失败，可以不适用docker内置数据库，而使用外部数据库，在.env中配置好环境变量就可以了（记住去数据库控制台添加白名单）
+
+3、直接加载已有镜像，具体步骤如下
+
+首先要手动找到镜像（自行解决），然后将文件放到某个路径下，比如/home/user。
+最后在目标主机上使用docker load命令加载这些镜像
+
+```shell
+docker-compose load -i /path/to/destination/openjdk.tar
+docker-compose load -i /path/to/destination/mysql.tar
+docker-compose load -i /path/to/destination/redis.tar
+```
+
 ### 后台管理界面的前端
 请查看./front-end/mall4v/README.md
 
