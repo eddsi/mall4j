@@ -183,14 +183,20 @@ docker-compose load -i /path/to/destination/openjdk.tar
 docker-compose load -i /path/to/destination/mysql.tar
 docker-compose load -i /path/to/destination/redis.tar
 ```
+### 部署S3（文件上传服务）
+.env中设置好MINIO_ROOT_USER、MINIO_ROOT_PASSWORD、MINIO_SERVER_URL
+这三个环境变量，然后执行
+```
+docker-compose -f docker-compose-minio.yml up -d
+```
 
-### 后台管理界面的前端
+### 部署后台管理界面的前端
 请查看./front-end/mall4v/README.md
 
-### 小程序
+### 部署小程序
 请查看./front-end/mall4m/README.md
 
-### uni-app
+### 部署uni-app
 请查看./front-end/mall4uni/README.md
 
 ## 相关截图
