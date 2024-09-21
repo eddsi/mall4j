@@ -157,7 +157,10 @@ sudo apt install openjdk-17-jdk
 mvn clean install
 ```
 #### 6. 设置环境变量
-将.env.example复制一份，重命名为.env，设置好每一个环境变量，如果缺少相应的环境变量，代码将无法运行
+
+将.env.example复制一份，重命名为.env，设置好每一个环境变量，如果缺少相应的环境变量，代码将无法运行。
+
+环境变量MINIO_ACCESS_KEY和MINIO_SECRET_KEY的设置方法，请参考S3部署部分。
 
 #### 7. 启动Docker Compose
    使用Docker Compose启动所有相关的服务
@@ -189,6 +192,9 @@ docker-compose load -i /path/to/destination/redis.tar
 ```
 docker-compose -f docker-compose-minio.yml up -d
 ```
+注意!MINIO_ROOT_USER=MINIO_ACCESS_KEY
+
+MINIO_ROOT_PASSWORD=MINIO_SECRET_KEY
 
 ### 部署后台管理界面的前端
 请查看./front-end/mall4v/README.md
