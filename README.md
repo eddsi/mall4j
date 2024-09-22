@@ -182,9 +182,9 @@ docker-compose up -d
 最后在目标主机上使用docker load命令加载这些镜像
 
 ```shell
-docker-compose load -i /path/to/destination/openjdk.tar
-docker-compose load -i /path/to/destination/mysql.tar
-docker-compose load -i /path/to/destination/redis.tar
+docker load -i /path/to/destination/openjdk.tar
+docker load -i /path/to/destination/mysql.tar
+docker load -i /path/to/destination/redis.tar
 ```
 ### 部署S3（文件上传服务）
 .env中设置好MINIO_ROOT_USER、MINIO_ROOT_PASSWORD、MINIO_SERVER_URL
