@@ -58,6 +58,7 @@ pnpm run dev
 pnpm run build
 ```
 
+- 登陆后台管理界面，默认用户名admin,密码123456
 - 如果不想使用 pnpm，请删除 `package.json` 文件中 `preinstall` 脚本后再进行安装
 
 ```json
