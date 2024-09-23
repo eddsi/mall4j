@@ -167,7 +167,7 @@ docker-compose up -d
 ```
 
 #### 7. 重新启动容器时注意事项
-   由于docker启动容器使用了jar包，而maven打jar包过程中，配置文件中使用，所以每一次环境变量变动后重新启动容器，都要重新构建
+每次启动 Docker 容器时，都会使用由 Maven 构建的 jar 包，而在构建 jar 包时，配置文件中的环境变量已经被固化。因此，每当环境变量发生变动后，必须重新构建容器以应用这些更新
 ```angular2html
 docker stop $(docker ps -aq)
 docker rm $(docker ps -aq)
