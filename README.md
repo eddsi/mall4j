@@ -158,16 +158,23 @@ sudo apt install openjdk-17-jdk
 
 环境变量MINIO_ACCESS_KEY和MINIO_SECRET_KEY的设置方法，请参考S3部署部分。
 
-#### 6. 利用Maven打包
-使用Maven将项目打包成一个可执行的JAR文件
+#### 6. 利用Maven打包并启动Docker Compose
+使用Maven将项目打包成一个可执行的JAR文件，使用Docker Compose启动所有相关的服务
 ```
 . .env
 mvn clean install
+docker-compose up -d
 ```
 
-#### 7. 启动Docker Compose
-   使用Docker Compose启动所有相关的服务
+#### 7. 重新启动容器时注意事项
+   由于docker启动容器使用了jar包，而maven打jar包过程中，配置文件中使用，所以每一次环境变量变动后重新启动容器，都要重新构建
 ```angular2html
+docker stop $(docker ps -aq)
+docker rm $(docker ps -aq)
+docker rmi mall4j-api
+docker rmi mall4j-admin
+. .env
+mvn clean install
 docker-compose up -d
 ```
 
