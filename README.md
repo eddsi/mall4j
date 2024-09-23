@@ -151,16 +151,19 @@ sudo systemctl restart docker
 sudo apt update
 sudo apt install openjdk-17-jdk
 ```
-#### 5. 利用Maven打包
-   使用Maven将项目打包成一个可执行的JAR文件
-```
-mvn clean install
-```
-#### 6. 设置环境变量
+
+#### 5. 设置环境变量
 
 将.env.example复制一份，重命名为.env，设置好每一个环境变量，如果缺少相应的环境变量，代码将无法运行。
 
 环境变量MINIO_ACCESS_KEY和MINIO_SECRET_KEY的设置方法，请参考S3部署部分。
+
+#### 6. 利用Maven打包
+使用Maven将项目打包成一个可执行的JAR文件
+```
+. .env
+mvn clean install
+```
 
 #### 7. 启动Docker Compose
    使用Docker Compose启动所有相关的服务
